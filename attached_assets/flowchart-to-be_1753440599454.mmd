@@ -1,0 +1,35 @@
+flowchart TD
+
+    A[Avvio] --> B{Scegli un'opzione}
+    B -- Login --> C[Schermata di Login]
+    C --> D{Credenziali corrette?}
+    D -- Sì --> E[Schermata utente con opportunità in linea con il profilo]
+    D -- No --> F[Errore di login - rimani sulla pagina di login]
+
+    B -- Scrivi il tuo futuro --> G[Inizia processo guidato per caricare il CV]
+    G --> H[Completamento caricamento CV]
+    H --> I[Schermata di registrazione]
+    I --> J{Email già registrata?}
+    J -- No --> K[Utente registrato e loggato]
+    J -- Sì --> L{Vuoi andare al login?}
+    L -- Sì --> C
+    L -- No --> M[Rimani in registrazione - cambia email]
+    M --> I
+    
+    K --> E
+    
+    E --> N{Filtra opportunità}
+    N -- Opportunità Lavorative --> O[Mostra opportunità LAVORATIVE filtrate]
+    N -- Opportunità Formative --> P[Mostra opportunità FORMATIVE filtrate]
+    N -- Tutte le opportunità --> Q[Mostra tutte le opportunità]
+
+    O --> R{Scegli un'azione}
+    P --> R
+    Q --> R
+
+    R -- Salva opportunità --> S[Opportunità aggiunte ai preferiti]
+    R -- Candidati --> T[Apri form di candidatura]
+
+    S --> U[Fine]
+    T --> U
+    F --> V[Fine]
