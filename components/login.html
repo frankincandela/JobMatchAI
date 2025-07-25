@@ -8,6 +8,12 @@
                         Accedi al tuo Account
                     </h3>
                     <p class="mb-0">Inserisci le tue credenziali per continuare</p>
+                    <div class="alert alert-info mt-3 mb-0" style="background: rgba(255,255,255,0.2); border: none; color: white;">
+                        <small>
+                            <i class="fas fa-info-circle me-1"></i>
+                            <strong>Modalità Demo:</strong> Usa demo@careerguida.com / demo123
+                        </small>
+                    </div>
                 </div>
                 <div class="card-body p-5">
                     <form id="loginForm" novalidate>
@@ -21,7 +27,8 @@
                                 class="form-control" 
                                 id="email" 
                                 name="email" 
-                                placeholder="Inserisci la tua email"
+                                placeholder="demo@careerguida.com"
+                                value="demo@careerguida.com"
                                 required
                             >
                             <div class="invalid-feedback" id="emailError"></div>
@@ -38,7 +45,8 @@
                                     class="form-control" 
                                     id="password" 
                                     name="password" 
-                                    placeholder="Inserisci la tua password"
+                                    placeholder="demo123"
+                                    value="demo123"
                                     required
                                 >
                                 <button 

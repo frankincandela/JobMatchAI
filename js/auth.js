@@ -14,6 +14,12 @@ class AuthService {
                 };
             }
 
+            // Check if Supabase is available
+            if (!supabaseClient.isReady()) {
+                console.log('🧪 [LOGIN] Supabase not available, using demo login');
+                return await this.demoLogin(email, password);
+            }
+
             // Call Supabase auth
             const { data, error } = await supabaseClient.auth.signInWithPassword({
                 email: email.trim().toLowerCase(),
@@ -66,6 +72,53 @@ class AuthService {
         }
     }
 
+    static async demoLogin(email, password) {
+        console.log('🧪 [DEMO LOGIN] Using demo authentication');
+        
+        // Demo credentials
+        const demoCredentials = [
+            { email: 'demo@careerguida.com', password: 'demo123', name: 'Utente Demo' },
+            { email: 'test@example.com', password: 'test123', name: 'Test User' },
+            { email: 'mario.rossi@example.com', password: 'password', name: 'Mario Rossi' }
+        ];
+
+        // Check credentials
+        const user = demoCredentials.find(u => 
+            u.email.toLowerCase() === email.toLowerCase() && u.password === password
+        );
+
+        if (!user) {
+            return {
+                success: false,
+                message: 'Credenziali non valide. Usa: demo@careerguida.com / demo123'
+            };
+        }
+
+        // Create demo user profile
+        const userProfile = {
+            id: 'demo-user-' + Date.now(),
+            email: user.email,
+            name: user.name,
+            firstName: user.name.split(' ')[0],
+            lastName: user.name.split(' ')[1] || '',
+            created_at: new Date().toISOString(),
+            isDemo: true
+        };
+
+        this.currentUser = userProfile;
+        
+        // Store in localStorage for persistence
+        localStorage.setItem('career_guidance_user', JSON.stringify(userProfile));
+
+        console.log('✅ [DEMO LOGIN] Demo login successful');
+        
+        return {
+            success: true,
+            user: userProfile,
+            message: 'Login demo effettuato con successo'
+        };
+    }
+
     static async register(userData) {
         try {
             console.log('🚀 [REGISTER] Starting registration for:', userData.email);
@@ -77,6 +130,12 @@ class AuthService {
                     success: false,
                     message: validation.message
                 };
+            }
+
+            // Check if Supabase is available
+            if (!supabaseClient.isReady()) {
+                console.log('🧪 [REGISTER] Supabase not available, using demo registration');
+                return await this.demoRegister(userData);
             }
 
             // Register with Supabase Auth
@@ -129,6 +188,34 @@ class AuthService {
                 message: 'Errore durante la registrazione. Riprova più tardi.'
             };
         }
+    }
+
+    static async demoRegister(userData) {
+        console.log('🧪 [DEMO REGISTER] Using demo registration');
+        
+        // Create demo user profile
+        const userProfile = {
+            id: 'demo-user-' + Date.now(),
+            email: userData.email.toLowerCase(),
+            name: `${userData.firstName} ${userData.lastName}`,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            created_at: new Date().toISOString(),
+            isDemo: true
+        };
+
+        this.currentUser = userProfile;
+        
+        // Store in localStorage for persistence
+        localStorage.setItem('career_guidance_user', JSON.stringify(userProfile));
+
+        console.log('✅ [DEMO REGISTER] Demo registration successful');
+        
+        return {
+            success: true,
+            user: userProfile,
+            message: 'Registrazione demo completata con successo'
+        };
     }
 
     static async logout() {
