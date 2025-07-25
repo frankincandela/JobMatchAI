@@ -105,6 +105,27 @@ Preferred communication style: Simple, everyday language.
 4. **Filtering/Sorting**: Apply user-selected filters and sorting preferences
 5. **Display**: Present ranked opportunities with match percentages
 
+## Configurazione Supabase
+
+### Modalità Demo (Attuale)
+L'app funziona attualmente in **modalità demo** senza necessità di configurazione:
+- Login automatico con `demo@careerguida.com` / `demo123`
+- Tutti i dati sono simulati e non persistenti
+- Perfetto per test e sviluppo
+
+### Configurazione Produzione
+Per database persistente e autenticazione reale:
+
+1. **Crea progetto Supabase** su [supabase.com](https://supabase.com)
+2. **Ottieni credenziali**: Project URL e Anon Key
+3. **Imposta variabili d'ambiente**:
+   ```bash
+   SUPABASE_URL=https://your-project.supabase.co
+   SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIs...
+   ```
+
+Vedi `SUPABASE_SETUP.md` per guida completa.
+
 ## External Dependencies
 
 ### Third-Party Services

@@ -15,7 +15,7 @@ class AuthService {
             }
 
             // Check if Supabase is available
-            if (!supabaseClient.isReady()) {
+            if (typeof supabaseClient === 'undefined' || !supabaseClient || !supabaseClient.isReady || !supabaseClient.isReady()) {
                 console.log('🧪 [LOGIN] Supabase not available, using demo login');
                 return await this.demoLogin(email, password);
             }
@@ -133,7 +133,7 @@ class AuthService {
             }
 
             // Check if Supabase is available
-            if (!supabaseClient.isReady()) {
+            if (typeof supabaseClient === 'undefined' || !supabaseClient || !supabaseClient.isReady || !supabaseClient.isReady()) {
                 console.log('🧪 [REGISTER] Supabase not available, using demo registration');
                 return await this.demoRegister(userData);
             }
