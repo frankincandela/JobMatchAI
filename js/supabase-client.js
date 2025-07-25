@@ -116,48 +116,75 @@ class SupabaseClient {
 // Create singleton instance
 const supabaseInstance = new SupabaseClient();
 
-// Auto-initialize with environment variables or defaults
-(function initializeSupabase() {
+// Auto-initialize with environment variables or defaults  
+// Wait for DOM to be ready before initializing
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeSupabase);
+} else {
+    initializeSupabase();
+}
+
+async function initializeSupabase() {
     try {
-        // Try to get credentials from environment variables or fallback
+        console.log('🔧 Attempting to initialize Supabase...');
+        
         let supabaseUrl, supabaseKey;
         
-        // Check if process is available (Node.js environment)
-        if (typeof process !== 'undefined' && process.env) {
-            supabaseUrl = process.env.SUPABASE_URL;
-            supabaseKey = process.env.SUPABASE_ANON_KEY;
+        // Fetch environment variables from the server endpoint
+        try {
+            const response = await fetch('/api/env');
+            const env = await response.json();
+            supabaseUrl = env.SUPABASE_URL;
+            supabaseKey = env.SUPABASE_ANON_KEY;
+            
+            if (env.status === 'ok') {
+                console.log('📡 Successfully retrieved environment variables');
+            }
+        } catch (fetchError) {
+            console.warn('⚠️ Could not fetch environment variables from server');
+            
+            // Fallback to pre-injected variables
+            if (typeof window !== 'undefined' && window.ENV) {
+                supabaseUrl = window.ENV.SUPABASE_URL;
+                supabaseKey = window.ENV.SUPABASE_ANON_KEY;
+            }
         }
         
-        // Fallback to window object (browser environment)
-        if (!supabaseUrl && typeof window !== 'undefined') {
-            supabaseUrl = window.SUPABASE_URL;
-            supabaseKey = window.SUPABASE_ANON_KEY;
-        }
-        
-        // Don't initialize with placeholder or missing values
-        if (!supabaseUrl || !supabaseKey || 
-            supabaseUrl.includes('your-project') || 
-            supabaseKey === 'your-anon-key') {
+        // Validate credentials
+        if (!supabaseUrl || !supabaseKey) {
             console.warn('⚠️ Supabase credentials not configured. Please set SUPABASE_URL and SUPABASE_ANON_KEY');
             return;
         }
+        
+        // Don't initialize with placeholder or missing values
+        if (supabaseUrl.includes('your-project') || 
+            supabaseKey === 'your-anon-key' ||
+            supabaseUrl.length < 10 ||
+            supabaseKey.length < 10) {
+            console.warn('⚠️ Supabase credentials appear to be placeholder values');
+            return;
+        }
 
-        // Load Supabase from CDN if not already loaded
-        if (typeof supabase === 'undefined') {
-            const script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
-            script.onload = () => {
-                supabaseInstance.init(supabaseUrl, supabaseKey);
-            };
-            document.head.appendChild(script);
-        } else {
+        // Initialize Supabase
+        if (typeof supabase !== 'undefined') {
             supabaseInstance.init(supabaseUrl, supabaseKey);
+            console.log('✅ Supabase client initialized successfully');
+            
+            // Test the connection
+            const testResult = await supabaseInstance.testConnection();
+            if (testResult.success) {
+                console.log('✅ Supabase connection test passed');
+            } else {
+                console.warn('⚠️ Supabase connection test failed:', testResult.message);
+            }
+        } else {
+            console.error('❌ Supabase library not loaded');
         }
 
     } catch (error) {
-        console.error('Failed to auto-initialize Supabase:', error);
+        console.error('Failed to initialize Supabase:', error);
     }
-})();
+}
 
 // Export the client instance for global use
 const supabaseClient = {

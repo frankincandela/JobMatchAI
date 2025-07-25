@@ -19,9 +19,12 @@ class OpportunityService {
                 userProfile = await ProfileService.getUserProfile(AuthService.currentUser.id);
             }
 
-            // Check if mock mode is enabled
-            if (window.mockAIService && window.mockAIService.isEnabled) {
-                console.log('🧪 Using Mock AI Service for opportunities');
+            // Check Supabase connection first, fallback to mock if needed
+            if (supabaseClient && supabaseClient.isReady && supabaseClient.isReady()) {
+                console.log('🗄️ Loading opportunities from Supabase database');
+                return await this.loadFromSupabase(userProfile);
+            } else if (window.mockAIService && window.mockAIService.isEnabled) {
+                console.log('🧪 Using Mock AI Service for opportunities (Supabase not available)');
                 
                 // Get mock opportunities
                 const mockOpportunities = userProfile 
@@ -59,19 +62,28 @@ class OpportunityService {
                 return this.opportunities;
             }
 
+            // If no mock service, use fallback data
+            console.log('⚠️ No data source available, using static fallback');
+            this.opportunities = [];
+            this.filteredOpportunities = [];
+            return this.opportunities;
+
+        } catch (error) {
+            console.error('Error loading opportunities:', error);
+            this.opportunities = [];
+            this.filteredOpportunities = [];
+            return this.opportunities;
+        }
+    }
+
+    static async loadFromSupabase(userProfile) {
+        try {
+            console.log('🗄️ Fetching opportunities from Supabase...');
+            
             // Load opportunities from database
             const { data, error } = await supabaseClient
                 .from('job_opportunities')
-                .select(`
-                    *,
-                    companies (
-                        name,
-                        sector,
-                        location,
-                        description,
-                        contact_email
-                    )
-                `)
+                .select('*')
                 .eq('is_active', true)
                 .order('created_at', { ascending: false });
 

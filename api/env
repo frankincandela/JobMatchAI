@@ -1,0 +1,9 @@
+// Simple endpoint to expose environment variables to client
+const env = {
+    SUPABASE_URL: process.env.SUPABASE_URL,
+    SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY
+};
+
+// Return JSON response
+console.log('Content-Type: application/json\n');
+console.log(JSON.stringify(env));
