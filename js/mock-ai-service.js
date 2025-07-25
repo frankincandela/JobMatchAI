@@ -553,3 +553,60 @@ if (typeof module !== 'undefined' && module.exports) {
 }
 
 console.log('🧪 Mock AI Service initialized - Ready for testing without API costs!');
+
+// Global functions for test panel controls
+window.toggleTestPanel = function() {
+    const panel = document.getElementById('testPanelContent');
+    const icon = document.getElementById('testPanelToggleIcon');
+    
+    if (panel && icon) {
+        if (panel.style.display === 'none') {
+            panel.style.display = 'block';
+            icon.className = 'fas fa-minus';
+        } else {
+            panel.style.display = 'none';
+            icon.className = 'fas fa-plus';
+        }
+    }
+};
+
+window.setAIMode = function(mode) {
+    const mockBtn = document.getElementById('mockModeBtn');
+    const liveBtn = document.getElementById('liveModeBtn');
+    
+    if (mode === 'mock') {
+        window.mockAIService.isEnabled = true;
+        if (mockBtn) mockBtn.classList.add('active');
+        if (liveBtn) liveBtn.classList.remove('active');
+        showToast('Modalità Test attivata', 'info');
+    } else {
+        window.mockAIService.isEnabled = false;
+        if (mockBtn) mockBtn.classList.remove('active');
+        if (liveBtn) liveBtn.classList.add('active');
+        showToast('Modalità Live attivata', 'warning');
+    }
+};
+
+window.updateMockDelay = function(delay) {
+    window.mockAIService.delay = parseInt(delay);
+    const display = document.getElementById('delayDisplay');
+    if (display) {
+        display.textContent = delay + 'ms';
+    }
+    showToast(`Ritardo simulato: ${delay}ms`, 'info');
+};
+
+window.regenerateTestData = function() {
+    // Trigger a refresh of mock data
+    showToast('Dati di test rigenerati', 'success');
+    
+    // Update statistics display
+    const statsContainer = document.querySelector('.test-stats');
+    if (statsContainer) {
+        const callsElement = statsContainer.querySelector('.calls-count');
+        const savingsElement = statsContainer.querySelector('.cost-savings');
+        
+        if (callsElement) callsElement.textContent = '0';
+        if (savingsElement) savingsElement.textContent = '$0.00';
+    }
+};
