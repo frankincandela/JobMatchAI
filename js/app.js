@@ -117,6 +117,19 @@ class CareerGuidanceApp {
             dynamicContent.innerHTML = html;
             dynamicContent.style.display = 'block';
             
+            // Execute any scripts in the loaded HTML
+            const scripts = dynamicContent.querySelectorAll('script');
+            scripts.forEach(script => {
+                try {
+                    const newScript = document.createElement('script');
+                    newScript.textContent = script.textContent;
+                    document.body.appendChild(newScript);
+                    document.body.removeChild(newScript);
+                } catch (e) {
+                    console.warn('Error executing script from loaded view:', e);
+                }
+            });
+            
             // Add fade-in animation
             dynamicContent.classList.add('fade-in');
             
@@ -153,6 +166,12 @@ class CareerGuidanceApp {
                 break;
             case 'cv-upload':
                 this.initCVUpload();
+                // Use the global initialization function
+                setTimeout(() => {
+                    if (typeof window.initCVUploadComponent === 'function') {
+                        window.initCVUploadComponent();
+                    }
+                }, 100);
                 break;
             case 'application-form':
                 this.initApplicationForm();
@@ -253,7 +272,10 @@ class CareerGuidanceApp {
     }
 
     initCVUpload() {
-        CVUploadService.initUploadArea();
+        // Initialize CV upload component if it exists
+        if (typeof CVUploadComponent !== 'undefined') {
+            new CVUploadComponent();
+        }
     }
 
     initApplicationForm() {

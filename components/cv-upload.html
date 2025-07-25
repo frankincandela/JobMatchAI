@@ -355,17 +355,27 @@ class CVUploadComponent {
 
         // Select file button
         const selectFileBtn = document.getElementById('selectFileBtn');
-        selectFileBtn.addEventListener('click', () => {
-            fileInput.click();
-        });
+        if (selectFileBtn) {
+            selectFileBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Select file button clicked');
+                fileInput.click();
+            });
+        }
 
         // Upload zone click
         const uploadZone = document.getElementById('cvUploadZone');
-        uploadZone.addEventListener('click', (e) => {
-            if (e.target.closest('#uploadContent')) {
-                fileInput.click();
-            }
-        });
+        if (uploadZone) {
+            uploadZone.addEventListener('click', (e) => {
+                if (e.target.closest('#uploadContent') || e.target.closest('#selectFileBtn')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Upload zone clicked');
+                    fileInput.click();
+                }
+            });
+        }
 
         // Retry button
         const retryBtn = document.getElementById('retryUploadBtn');
@@ -699,4 +709,34 @@ class CVUploadComponent {
 document.addEventListener('DOMContentLoaded', () => {
     new CVUploadComponent();
 });
+
+// Global function to initialize CV upload component
+window.initCVUploadComponent = function() {
+    try {
+        console.log('Initializing CV Upload Component...');
+        
+        // Check if elements exist before initializing
+        const selectFileBtn = document.getElementById('selectFileBtn');
+        const fileInput = document.getElementById('cvFileInput');
+        const uploadZone = document.getElementById('cvUploadZone');
+        
+        if (selectFileBtn && fileInput && uploadZone) {
+            window.cvUploadInstance = new CVUploadComponent();
+            console.log('CV Upload Component initialized successfully');
+        } else {
+            console.warn('CV Upload elements not found, retrying in 100ms...');
+            setTimeout(window.initCVUploadComponent, 100);
+        }
+    } catch (error) {
+        console.error('Error initializing CV Upload Component:', error);
+    }
+};
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', window.initCVUploadComponent);
+} else {
+    // DOM is already loaded
+    window.initCVUploadComponent();
+}
 </script>
