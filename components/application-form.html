@@ -1,0 +1,1106 @@
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Header -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h3 class="mb-2">
+                                <i class="fas fa-paper-plane me-2 text-primary"></i>
+                                Candidatura
+                            </h3>
+                            <p class="text-muted mb-0" id="opportunityTitle">
+                                Completa la tua candidatura per questa opportunità
+                            </p>
+                        </div>
+                        <button class="btn btn-outline-secondary" onclick="goBackToOpportunities()">
+                            <i class="fas fa-arrow-left me-2"></i>
+                            Indietro
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Opportunity Summary -->
+            <div class="card mb-4" id="opportunitySummaryCard">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-briefcase me-2"></i>
+                        Riepilogo Opportunità
+                    </h6>
+                </div>
+                <div class="card-body" id="opportunitySummary">
+                    <!-- Opportunity details will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Application Form -->
+            <form id="applicationForm" novalidate>
+                <!-- Personal Information -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0">
+                            <i class="fas fa-user me-2"></i>
+                            Informazioni Personali
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="firstName" class="form-label">Nome *</label>
+                                <input type="text" class="form-control" id="firstName" name="firstName" required>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="lastName" class="form-label">Cognome *</label>
+                                <input type="text" class="form-control" id="lastName" name="lastName" required>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email *</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                            <div class="invalid-feedback"></div>
+                            <div class="form-text">
+                                L'azienda ti contatterà a questo indirizzo email
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="phone" class="form-label">Telefono</label>
+                                <input type="tel" class="form-control" id="phone" name="phone">
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="dateOfBirth" class="form-label">Data di Nascita</label>
+                                <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth" max="2006-01-01">
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Indirizzo di Residenza *</label>
+                            <textarea class="form-control" id="address" name="address" rows="2" required 
+                                      placeholder="Via, numero civico, città, provincia"></textarea>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Education and Experience -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0">
+                            <i class="fas fa-graduation-cap me-2"></i>
+                            Formazione ed Esperienza
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="educationLevel" class="form-label">Livello di Istruzione *</label>
+                            <select class="form-select" id="educationLevel" name="educationLevel" required>
+                                <option value="">Seleziona il tuo livello di istruzione</option>
+                                <option value="Licenza Media">Licenza Media</option>
+                                <option value="Diploma">Diploma</option>
+                                <option value="Laurea Triennale">Laurea Triennale</option>
+                                <option value="Laurea Specialistica/Magistrale">Laurea Specialistica/Magistrale</option>
+                                <option value="Dottorato di Ricerca">Dottorato di Ricerca</option>
+                            </select>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="institution" class="form-label">Istituto/Università *</label>
+                            <input type="text" class="form-control" id="institution" name="institution" required
+                                   placeholder="Nome dell'istituto dove hai conseguito il titolo">
+                            <div class="invalid-feedback"></div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="relevantExperience" class="form-label">Esperienza Rilevante</label>
+                            <textarea class="form-control" id="relevantExperience" name="relevantExperience" rows="4"
+                                      placeholder="Descrivi brevemente la tua esperienza più rilevante per questa posizione"></textarea>
+                            <div class="form-text">
+                                Includi esperienze lavorative, stage, progetti o competenze pertinenti
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Motivation Letter -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0">
+                            <i class="fas fa-heart me-2"></i>
+                            Lettera di Motivazione
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="motivationLetter" class="form-label">Perché sei interessato a questa opportunità? *</label>
+                            <textarea class="form-control" id="motivationLetter" name="motivationLetter" rows="6" required
+                                      placeholder="Spiega perché sei interessato a questa posizione e cosa puoi offrire all'azienda. Evidenzia le tue motivazioni e come le tue competenze si allineano con i requisiti richiesti."></textarea>
+                            <div class="invalid-feedback"></div>
+                            <div class="form-text">
+                                <span id="motivationCount">0</span>/1000 caratteri | 
+                                Sii specifico e dimostra la tua conoscenza dell'azienda e del ruolo
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Availability -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0">
+                            <i class="fas fa-calendar me-2"></i>
+                            Disponibilità
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="startDate" class="form-label">Data di Inizio Disponibile</label>
+                                <input type="date" class="form-control" id="startDate" name="startDate">
+                                <div class="form-text">Quando potresti iniziare a lavorare?</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="availability" class="form-label">Tipo di Disponibilità</label>
+                                <select class="form-select" id="availability" name="availability">
+                                    <option value="">Seleziona disponibilità</option>
+                                    <option value="full-time">Tempo pieno</option>
+                                    <option value="part-time">Part-time</option>
+                                    <option value="flexible">Flessibile</option>
+                                    <option value="remote">Solo remoto</option>
+                                    <option value="hybrid">Ibrido (remoto + ufficio)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="salaryExpectations" class="form-label">Aspettative Salariali (€/anno)</label>
+                            <div class="row">
+                                <div class="col-6">
+                                    <input type="number" class="form-control" id="salaryMin" name="salaryMin" 
+                                           placeholder="Min" min="0">
+                                </div>
+                                <div class="col-6">
+                                    <input type="number" class="form-control" id="salaryMax" name="salaryMax" 
+                                           placeholder="Max" min="0">
+                                </div>
+                            </div>
+                            <div class="form-text">Opzionale - aiuta l'azienda a valutare la compatibilità</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CV Section -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0">
+                            <i class="fas fa-file-pdf me-2"></i>
+                            Curriculum Vitae
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div id="cvSection">
+                            <!-- CV upload or existing CV will be shown here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Privacy and Consent -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0">
+                            <i class="fas fa-shield-alt me-2"></i>
+                            Privacy e Consensi
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="dataProcessingConsent" 
+                                       name="dataProcessingConsent" required>
+                                <label class="form-check-label" for="dataProcessingConsent">
+                                    <strong>Consenso al trattamento dei dati personali *</strong><br>
+                                    <small class="text-muted">
+                                        Acconsento al trattamento dei miei dati personali per finalità di selezione del personale, 
+                                        come previsto dal Regolamento UE 2016/679 (GDPR). I dati saranno trattati dall'azienda 
+                                        per valutare la candidatura e gestire il processo di selezione.
+                                    </small>
+                                </label>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="commercialConsent" 
+                                       name="commercialConsent">
+                                <label class="form-check-label" for="commercialConsent">
+                                    <strong>Comunicazioni commerciali</strong><br>
+                                    <small class="text-muted">
+                                        Acconsento a ricevere comunicazioni commerciali relative a future opportunità 
+                                        lavorative e servizi dell'azienda.
+                                    </small>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="newsletterConsent" 
+                                       name="newsletterConsent">
+                                <label class="form-check-label" for="newsletterConsent">
+                                    <strong>Newsletter Career Guidance</strong><br>
+                                    <small class="text-muted">
+                                        Acconsento a ricevere la newsletter con consigli di carriera e nuove opportunità 
+                                        dalla piattaforma Career Guidance.
+                                    </small>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Informativa Privacy:</strong> I tuoi dati saranno trattati nel rispetto del GDPR. 
+                            Puoi revocare il consenso in qualsiasi momento e richiedere la cancellazione dei dati 
+                            contattando il nostro team privacy.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Section -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h6 class="mb-2">Pronto per inviare la candidatura?</h6>
+                                <p class="text-muted mb-md-0">
+                                    Controlla tutti i dati inseriti prima di procedere. Riceverai una conferma via email.
+                                </p>
+                            </div>
+                            <div class="col-md-4 text-md-end">
+                                <button type="button" class="btn btn-outline-secondary me-2" onclick="saveDraft()">
+                                    <i class="fas fa-save me-2"></i>
+                                    Salva Bozza
+                                </button>
+                                <button type="submit" class="btn btn-success btn-lg" id="submitApplicationBtn">
+                                    <i class="fas fa-paper-plane me-2"></i>
+                                    Invia Candidatura
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Application Success Modal -->
+<div class="modal fade" id="applicationSuccessModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center p-5">
+                <div class="success-animation mb-4">
+                    <i class="fas fa-check-circle fa-4x text-success"></i>
+                </div>
+                <h4 class="mb-3">Candidatura Inviata con Successo!</h4>
+                <p class="text-muted mb-4">
+                    La tua candidatura è stata inviata all'azienda. Riceverai una conferma via email 
+                    e l'azienda ti contatterà direttamente se il tuo profilo risulta compatibile.
+                </p>
+                <div class="d-flex justify-content-center gap-3">
+                    <button type="button" class="btn btn-outline-primary" onclick="goBackToOpportunities()">
+                        <i class="fas fa-search me-2"></i>
+                        Altre Opportunità
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="showDashboard()">
+                        <i class="fas fa-tachometer-alt me-2"></i>
+                        Dashboard
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.opportunity-highlight {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    border-left: 4px solid var(--primary-color);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+.cv-upload-section {
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.cv-upload-section:hover {
+    border-color: var(--primary-color);
+    background: rgba(102, 126, 234, 0.05);
+}
+
+.cv-upload-section.has-file {
+    border-color: var(--success-color);
+    background: rgba(76, 175, 80, 0.05);
+}
+
+.uploaded-cv-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid var(--success-color);
+}
+
+.cv-file-icon {
+    font-size: 2rem;
+    color: var(--success-color);
+}
+
+.success-animation {
+    animation: successPulse 0.6s ease-out;
+}
+
+@keyframes successPulse {
+    0% { transform: scale(0.8); opacity: 0; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.character-counter {
+    font-size: 0.875rem;
+}
+
+.character-counter.over-limit {
+    color: var(--error-color);
+}
+
+.character-counter.near-limit {
+    color: var(--warning-color);
+}
+
+.form-section-header {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    margin: -1rem -1rem 1rem -1rem;
+    padding: 1rem;
+    border-radius: 8px 8px 0 0;
+}
+
+@media (max-width: 768px) {
+    .cv-upload-section {
+        padding: 1.5rem 1rem;
+    }
+    
+    .uploaded-cv-info {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+</style>
+
+<script>
+// Application Form Management
+class ApplicationFormComponent {
+    constructor() {
+        this.currentOpportunity = null;
+        this.userProfile = null;
+        this.cvFile = null;
+        this.init();
+    }
+
+    async init() {
+        try {
+            // Load opportunity data from session storage
+            const opportunityData = sessionStorage.getItem('applicationOpportunity');
+            if (opportunityData) {
+                this.currentOpportunity = JSON.parse(opportunityData);
+                this.displayOpportunitySummary();
+            }
+
+            // Load user profile if available
+            if (AuthService.currentUser) {
+                this.userProfile = await ProfileService.getUserProfile(AuthService.currentUser.id);
+                this.prefillUserData();
+            }
+
+            this.setupEventListeners();
+            this.setupCVSection();
+            
+        } catch (error) {
+            console.error('Error initializing application form:', error);
+            showToast('Errore nell\'inizializzazione del form', 'error');
+        }
+    }
+
+    displayOpportunitySummary() {
+        if (!this.currentOpportunity) return;
+
+        const opp = this.currentOpportunity;
+        document.getElementById('opportunityTitle').textContent = 
+            `Candidatura per: ${opp.title} presso ${opp.companyName}`;
+
+        const summaryHTML = `
+            <div class="opportunity-highlight p-3 rounded">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h5 class="mb-2">${opp.title}</h5>
+                        <h6 class="text-muted mb-2">
+                            <i class="fas fa-building me-1"></i>${opp.companyName}
+                        </h6>
+                        <p class="mb-2">
+                            <i class="fas fa-map-marker-alt me-1"></i>${opp.location}
+                            ${opp.isRemote ? ' | <i class="fas fa-wifi me-1"></i>Remote' : ''}
+                        </p>
+                        <p class="mb-0 small">${this.truncateText(opp.description, 150)}</p>
+                    </div>
+                    <div class="col-md-4 text-md-end">
+                        <span class="badge badge-sector mb-2">${opp.sector}</span><br>
+                        ${opp.matchScore > 0 ? `<span class="match-score">${opp.matchScore}% match</span><br>` : ''}
+                        ${opp.salaryMin && opp.salaryMax ? `
+                            <small class="text-success fw-bold">
+                                €${opp.salaryMin.toLocaleString()} - €${opp.salaryMax.toLocaleString()}
+                            </small>
+                        ` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.getElementById('opportunitySummary').innerHTML = summaryHTML;
+    }
+
+    prefillUserData() {
+        if (AuthService.currentUser) {
+            const user = AuthService.currentUser;
+            
+            // Fill basic user info
+            if (user.firstName) document.getElementById('firstName').value = user.firstName;
+            if (user.lastName) document.getElementById('lastName').value = user.lastName;
+            if (user.email) document.getElementById('email').value = user.email;
+            if (user.dateOfBirth) document.getElementById('dateOfBirth').value = user.dateOfBirth;
+        }
+
+        if (this.userProfile) {
+            const profile = this.userProfile;
+            
+            // Fill education info
+            if (profile.education) {
+                // Try to extract institution from education text
+                const educationLines = profile.education.split('\n');
+                if (educationLines.length > 0) {
+                    document.getElementById('institution').value = educationLines[0];
+                }
+            }
+
+            // Pre-fill relevant experience with a summary
+            if (profile.experiences && profile.experiences.length > 0) {
+                const experienceSummary = profile.experiences.map(exp => 
+                    `${exp.jobTitle} (${exp.duration}): ${exp.description}`
+                ).join('\n\n');
+                document.getElementById('relevantExperience').value = experienceSummary;
+            }
+        }
+    }
+
+    setupEventListeners() {
+        // Form submission
+        const form = document.getElementById('applicationForm');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.handleFormSubmission();
+        });
+
+        // Character counter for motivation letter
+        const motivationLetter = document.getElementById('motivationLetter');
+        const motivationCount = document.getElementById('motivationCount');
+        
+        motivationLetter.addEventListener('input', () => {
+            const count = motivationLetter.value.length;
+            motivationCount.textContent = count;
+            
+            motivationCount.classList.remove('over-limit', 'near-limit');
+            if (count > 1000) {
+                motivationCount.classList.add('over-limit');
+            } else if (count > 800) {
+                motivationCount.classList.add('near-limit');
+            }
+        });
+
+        // Real-time validation
+        const requiredFields = ['firstName', 'lastName', 'email', 'address', 'educationLevel', 'institution', 'motivationLetter'];
+        requiredFields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (field) {
+                field.addEventListener('blur', () => this.validateField(fieldId));
+                field.addEventListener('input', () => this.clearFieldError(fieldId));
+            }
+        });
+
+        // Consent validation
+        const dataProcessingConsent = document.getElementById('dataProcessingConsent');
+        dataProcessingConsent.addEventListener('change', () => {
+            this.validateField('dataProcessingConsent');
+        });
+    }
+
+    setupCVSection() {
+        const cvSection = document.getElementById('cvSection');
+        
+        // Check if user has existing CV
+        if (this.userProfile && this.userProfile.cvFilePath) {
+            this.displayExistingCV();
+        } else {
+            this.displayCVUpload();
+        }
+    }
+
+    displayExistingCV() {
+        const cvSection = document.getElementById('cvSection');
+        const fileName = this.userProfile.cvFilePath.split('/').pop();
+        
+        cvSection.innerHTML = `
+            <div class="uploaded-cv-info">
+                <div class="cv-file-icon">
+                    <i class="fas fa-file-pdf"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <h6 class="mb-1">CV Già Caricato</h6>
+                    <small class="text-muted">${fileName}</small>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-outline-primary btn-sm me-2" onclick="viewCV()">
+                        <i class="fas fa-eye me-1"></i>Visualizza
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="changeCV()">
+                        <i class="fas fa-upload me-1"></i>Cambia
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    displayCVUpload() {
+        const cvSection = document.getElementById('cvSection');
+        
+        cvSection.innerHTML = `
+            <div class="cv-upload-section" id="cvUploadSection">
+                <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i>
+                <h6>Carica il tuo CV</h6>
+                <p class="text-muted mb-3">PDF, DOC o DOCX (max 10MB)</p>
+                <button type="button" class="btn btn-outline-primary" onclick="selectCVFile()">
+                    <i class="fas fa-folder-open me-2"></i>Seleziona File
+                </button>
+                <input type="file" id="cvFileInput" accept=".pdf,.doc,.docx" style="display: none;">
+            </div>
+        `;
+
+        // Setup file input
+        const fileInput = document.getElementById('cvFileInput');
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                this.handleCVUpload(e.target.files[0]);
+            }
+        });
+
+        // Setup drag and drop
+        const uploadSection = document.getElementById('cvUploadSection');
+        this.setupDragAndDrop(uploadSection, fileInput);
+    }
+
+    setupDragAndDrop(uploadSection, fileInput) {
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadSection.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            });
+        });
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadSection.addEventListener(eventName, () => {
+                uploadSection.classList.add('dragover');
+            });
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadSection.addEventListener(eventName, () => {
+                uploadSection.classList.remove('dragover');
+            });
+        });
+
+        uploadSection.addEventListener('drop', (e) => {
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                this.handleCVUpload(files[0]);
+            }
+        });
+
+        uploadSection.addEventListener('click', () => {
+            fileInput.click();
+        });
+    }
+
+    async handleCVUpload(file) {
+        try {
+            // Validate file
+            if (!this.validateCVFile(file)) {
+                return;
+            }
+
+            showLoading();
+
+            // Upload file
+            const timestamp = Date.now();
+            const fileName = `application_${timestamp}_${file.name}`;
+            const filePath = `applications/${AuthService.currentUser.id}/${fileName}`;
+
+            const { data, error } = await supabaseClient.storage
+                .from('cvs')
+                .upload(filePath, file, {
+                    cacheControl: '3600',
+                    upsert: true
+                });
+
+            if (error) {
+                throw error;
+            }
+
+            // Get public URL
+            const { data: { publicUrl } } = supabaseClient.storage
+                .from('cvs')
+                .getPublicUrl(filePath);
+
+            this.cvFile = {
+                name: file.name,
+                path: filePath,
+                url: publicUrl,
+                size: file.size
+            };
+
+            // Update UI to show uploaded file
+            this.displayUploadedCV();
+            showToast('CV caricato con successo!', 'success');
+
+        } catch (error) {
+            console.error('Error uploading CV:', error);
+            showToast('Errore durante il caricamento del CV', 'error');
+        } finally {
+            hideLoading();
+        }
+    }
+
+    displayUploadedCV() {
+        const cvSection = document.getElementById('cvSection');
+        
+        cvSection.innerHTML = `
+            <div class="uploaded-cv-info">
+                <div class="cv-file-icon">
+                    <i class="fas fa-file-pdf"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <h6 class="mb-1">${this.cvFile.name}</h6>
+                    <small class="text-muted">
+                        ${this.formatFileSize(this.cvFile.size)} | Caricato: ${new Date().toLocaleString('it-IT')}
+                    </small>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="changeCV()">
+                        <i class="fas fa-upload me-1"></i>Cambia
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    validateCVFile(file) {
+        const validTypes = [
+            'application/pdf',
+            'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        ];
+
+        if (!validTypes.includes(file.type)) {
+            showToast('Formato file non supportato. Usa PDF, DOC o DOCX.', 'error');
+            return false;
+        }
+
+        if (file.size > 10 * 1024 * 1024) {
+            showToast('Il file è troppo grande. Massimo 10MB.', 'error');
+            return false;
+        }
+
+        return true;
+    }
+
+    validateField(fieldId) {
+        const field = document.getElementById(fieldId);
+        const errorElement = field.parentElement.querySelector('.invalid-feedback');
+        
+        field.classList.remove('is-invalid', 'is-valid');
+        
+        let isValid = true;
+        let errorMessage = '';
+
+        switch (fieldId) {
+            case 'firstName':
+            case 'lastName':
+                if (!field.value.trim()) {
+                    isValid = false;
+                    errorMessage = 'Campo obbligatorio';
+                }
+                break;
+
+            case 'email':
+                if (!field.value.trim()) {
+                    isValid = false;
+                    errorMessage = 'Email obbligatoria';
+                } else if (!this.validateEmail(field.value)) {
+                    isValid = false;
+                    errorMessage = 'Formato email non valido';
+                }
+                break;
+
+            case 'address':
+                if (!field.value.trim()) {
+                    isValid = false;
+                    errorMessage = 'Indirizzo obbligatorio';
+                } else if (field.value.trim().length < 10) {
+                    isValid = false;
+                    errorMessage = 'Inserisci un indirizzo completo';
+                }
+                break;
+
+            case 'educationLevel':
+                if (!field.value) {
+                    isValid = false;
+                    errorMessage = 'Seleziona il livello di istruzione';
+                }
+                break;
+
+            case 'institution':
+                if (!field.value.trim()) {
+                    isValid = false;
+                    errorMessage = 'Nome istituto obbligatorio';
+                }
+                break;
+
+            case 'motivationLetter':
+                if (!field.value.trim()) {
+                    isValid = false;
+                    errorMessage = 'Lettera di motivazione obbligatoria';
+                } else if (field.value.trim().length < 50) {
+                    isValid = false;
+                    errorMessage = 'Inserisci almeno 50 caratteri';
+                } else if (field.value.length > 1000) {
+                    isValid = false;
+                    errorMessage = 'Massimo 1000 caratteri';
+                }
+                break;
+
+            case 'dataProcessingConsent':
+                if (!field.checked) {
+                    isValid = false;
+                    errorMessage = 'Consenso obbligatorio per procedere';
+                }
+                break;
+        }
+
+        if (!isValid) {
+            field.classList.add('is-invalid');
+            if (errorElement) {
+                errorElement.textContent = errorMessage;
+            }
+        } else {
+            field.classList.add('is-valid');
+            if (errorElement) {
+                errorElement.textContent = '';
+            }
+        }
+
+        return isValid;
+    }
+
+    clearFieldError(fieldId) {
+        const field = document.getElementById(fieldId);
+        field.classList.remove('is-invalid', 'is-valid');
+        
+        const errorElement = field.parentElement.querySelector('.invalid-feedback');
+        if (errorElement) {
+            errorElement.textContent = '';
+        }
+    }
+
+    validateForm() {
+        const requiredFields = [
+            'firstName', 'lastName', 'email', 'address', 
+            'educationLevel', 'institution', 'motivationLetter', 'dataProcessingConsent'
+        ];
+
+        let isValid = true;
+        
+        requiredFields.forEach(fieldId => {
+            if (!this.validateField(fieldId)) {
+                isValid = false;
+            }
+        });
+
+        return isValid;
+    }
+
+    async handleFormSubmission() {
+        try {
+            if (!this.validateForm()) {
+                showToast('Completa tutti i campi obbligatori', 'error');
+                return;
+            }
+
+            if (!this.currentOpportunity) {
+                showToast('Errore: opportunità non trovata', 'error');
+                return;
+            }
+
+            showLoading();
+
+            // Collect form data
+            const formData = this.collectFormData();
+            
+            // Save application to database
+            const applicationId = await this.saveApplication(formData);
+            
+            // Send emails
+            await this.sendApplicationEmails(formData, applicationId);
+            
+            // Show success modal
+            this.showSuccessModal();
+            
+            // Clear session data
+            sessionStorage.removeItem('applicationOpportunity');
+
+        } catch (error) {
+            console.error('Error submitting application:', error);
+            showToast('Errore durante l\'invio della candidatura', 'error');
+        } finally {
+            hideLoading();
+        }
+    }
+
+    collectFormData() {
+        const form = document.getElementById('applicationForm');
+        const formData = new FormData(form);
+        
+        const applicationData = {
+            // Opportunity info
+            opportunityId: this.currentOpportunity.id,
+            opportunityTitle: this.currentOpportunity.title,
+            companyName: this.currentOpportunity.companyName,
+            companyEmail: this.currentOpportunity.companyEmail || this.currentOpportunity.contactEmail,
+            
+            // Personal info
+            firstName: formData.get('firstName'),
+            lastName: formData.get('lastName'),
+            email: formData.get('email'),
+            phone: formData.get('phone') || null,
+            dateOfBirth: formData.get('dateOfBirth') || null,
+            address: formData.get('address'),
+            
+            // Education
+            educationLevel: formData.get('educationLevel'),
+            institution: formData.get('institution'),
+            relevantExperience: formData.get('relevantExperience') || null,
+            
+            // Motivation and availability
+            motivationLetter: formData.get('motivationLetter'),
+            startDate: formData.get('startDate') || null,
+            availability: formData.get('availability') || null,
+            salaryMin: formData.get('salaryMin') ? parseInt(formData.get('salaryMin')) : null,
+            salaryMax: formData.get('salaryMax') ? parseInt(formData.get('salaryMax')) : null,
+            
+            // CV info
+            cvFilePath: this.cvFile ? this.cvFile.path : (this.userProfile ? this.userProfile.cvFilePath : null),
+            cvFileName: this.cvFile ? this.cvFile.name : null,
+            
+            // Consents
+            dataProcessingConsent: formData.get('dataProcessingConsent') === 'on',
+            commercialConsent: formData.get('commercialConsent') === 'on',
+            newsletterConsent: formData.get('newsletterConsent') === 'on',
+            
+            // Metadata
+            userId: AuthService.currentUser ? AuthService.currentUser.id : null,
+            submittedAt: new Date().toISOString(),
+            status: 'submitted',
+            matchScore: this.currentOpportunity.matchScore || 0
+        };
+        
+        return applicationData;
+    }
+
+    async saveApplication(applicationData) {
+        try {
+            const { data, error } = await supabaseClient
+                .from('job_applications')
+                .insert([{
+                    user_id: applicationData.userId,
+                    opportunity_id: applicationData.opportunityId,
+                    opportunity_title: applicationData.opportunityTitle,
+                    company_name: applicationData.companyName,
+                    first_name: applicationData.firstName,
+                    last_name: applicationData.lastName,
+                    email: applicationData.email,
+                    phone: applicationData.phone,
+                    date_of_birth: applicationData.dateOfBirth,
+                    address: applicationData.address,
+                    education_level: applicationData.educationLevel,
+                    institution: applicationData.institution,
+                    relevant_experience: applicationData.relevantExperience,
+                    motivation_letter: applicationData.motivationLetter,
+                    start_date: applicationData.startDate,
+                    availability: applicationData.availability,
+                    salary_min: applicationData.salaryMin,
+                    salary_max: applicationData.salaryMax,
+                    cv_file_path: applicationData.cvFilePath,
+                    cv_file_name: applicationData.cvFileName,
+                    data_processing_consent: applicationData.dataProcessingConsent,
+                    commercial_consent: applicationData.commercialConsent,
+                    newsletter_consent: applicationData.newsletterConsent,
+                    submitted_at: applicationData.submittedAt,
+                    status: applicationData.status,
+                    match_score: applicationData.matchScore
+                }])
+                .select()
+                .single();
+
+            if (error) {
+                throw error;
+            }
+
+            return data.id;
+
+        } catch (error) {
+            console.error('Error saving application:', error);
+            throw error;
+        }
+    }
+
+    async sendApplicationEmails(applicationData, applicationId) {
+        try {
+            // Simulate email sending with detailed logs
+            console.log('📧 =================================');
+            console.log('📧 INVIO EMAIL DI CANDIDATURA');
+            console.log('📧 =================================');
+            
+            // Email to user (confirmation)
+            console.log(`📧 Invio conferma a: ${applicationData.email}`);
+            console.log(`📧 Oggetto: Conferma candidatura - ${applicationData.opportunityTitle}`);
+            console.log(`📧 Contenuto: Candidatura inviata con successo per ${applicationData.opportunityTitle} presso ${applicationData.companyName}`);
+            
+            // Email to company
+            if (applicationData.companyEmail) {
+                console.log(`📧 Invio candidatura a: ${applicationData.companyEmail}`);
+                console.log(`📧 Oggetto: Nuova candidatura - ${applicationData.opportunityTitle}`);
+                console.log(`📧 Candidato: ${applicationData.firstName} ${applicationData.lastName}`);
+                console.log(`📧 Email candidato: ${applicationData.email}`);
+                console.log(`📧 Lettera motivazione: ${applicationData.motivationLetter.substring(0, 100)}...`);
+            }
+            
+            console.log('✅ Email inviate con successo');
+            
+            // In a real application, you would integrate with an email service here
+            // await emailService.sendApplicationConfirmation(applicationData);
+            // await emailService.sendApplicationToCompany(applicationData);
+            
+        } catch (error) {
+            console.error('Error sending emails:', error);
+            // Don't throw error here - application is already saved
+            showToast('Candidatura salvata, ma errore nell\'invio email', 'warning');
+        }
+    }
+
+    showSuccessModal() {
+        const modal = new bootstrap.Modal(document.getElementById('applicationSuccessModal'));
+        modal.show();
+    }
+
+    // Utility methods
+    validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    truncateText(text, maxLength) {
+        if (!text) return '';
+        if (text.length <= maxLength) return text;
+        return text.substring(0, maxLength) + '...';
+    }
+
+    saveDraft() {
+        try {
+            const formData = this.collectFormData();
+            localStorage.setItem('applicationDraft', JSON.stringify(formData));
+            showToast('Bozza salvata!', 'success');
+        } catch (error) {
+            console.error('Error saving draft:', error);
+            showToast('Errore nel salvare la bozza', 'error');
+        }
+    }
+}
+
+// Global functions
+let applicationFormComponent;
+
+document.addEventListener('DOMContentLoaded', () => {
+    applicationFormComponent = new ApplicationFormComponent();
+});
+
+function selectCVFile() {
+    document.getElementById('cvFileInput').click();
+}
+
+function viewCV() {
+    if (applicationFormComponent.userProfile && applicationFormComponent.userProfile.cvFilePath) {
+        // Open CV in new window
+        const { data: { publicUrl } } = supabaseClient.storage
+            .from('cvs')
+            .getPublicUrl(applicationFormComponent.userProfile.cvFilePath);
+        window.open(publicUrl, '_blank');
+    }
+}
+
+function changeCV() {
+    applicationFormComponent.displayCVUpload();
+}
+
+function goBackToOpportunities() {
+    showOpportunities();
+}
+
+function saveDraft() {
+    applicationFormComponent.saveDraft();
+}
+</script>

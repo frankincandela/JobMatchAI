@@ -1,0 +1,380 @@
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-7">
+            <div class="card shadow-lg border-0 rounded-lg mt-5">
+                <div class="card-header bg-gradient-primary text-white text-center py-4">
+                    <h3 class="font-weight-light my-2">
+                        <i class="fas fa-sign-in-alt me-2"></i>
+                        Accedi al tuo Account
+                    </h3>
+                    <p class="mb-0">Inserisci le tue credenziali per continuare</p>
+                </div>
+                <div class="card-body p-5">
+                    <form id="loginForm" novalidate>
+                        <div class="mb-4">
+                            <label for="email" class="form-label">
+                                <i class="fas fa-envelope me-2 text-primary"></i>
+                                Email
+                            </label>
+                            <input 
+                                type="email" 
+                                class="form-control" 
+                                id="email" 
+                                name="email" 
+                                placeholder="Inserisci la tua email"
+                                required
+                            >
+                            <div class="invalid-feedback" id="emailError"></div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="password" class="form-label">
+                                <i class="fas fa-lock me-2 text-primary"></i>
+                                Password
+                            </label>
+                            <div class="input-group">
+                                <input 
+                                    type="password" 
+                                    class="form-control" 
+                                    id="password" 
+                                    name="password" 
+                                    placeholder="Inserisci la tua password"
+                                    required
+                                >
+                                <button 
+                                    class="btn btn-outline-secondary" 
+                                    type="button" 
+                                    id="togglePassword"
+                                    onclick="togglePasswordVisibility()"
+                                >
+                                    <i class="fas fa-eye" id="passwordIcon"></i>
+                                </button>
+                            </div>
+                            <div class="invalid-feedback" id="passwordError"></div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <input 
+                                    class="form-check-input" 
+                                    type="checkbox" 
+                                    id="rememberMe" 
+                                    name="rememberMe"
+                                >
+                                <label class="form-check-label" for="rememberMe">
+                                    Ricordami
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="d-grid mb-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-sign-in-alt me-2"></i>
+                                Accedi
+                            </button>
+                        </div>
+
+                        <div class="text-center mb-3">
+                            <a href="#" class="text-decoration-none" onclick="showForgotPassword()">
+                                <i class="fas fa-question-circle me-1"></i>
+                                Hai dimenticato la password?
+                            </a>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer bg-light text-center py-3">
+                    <div class="small">
+                        Non hai ancora un account?
+                        <a href="#" id="registerLink" class="text-decoration-none fw-bold">
+                            <i class="fas fa-user-plus me-1"></i>
+                            Registrati qui
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Demo Credentials Card -->
+            <div class="card mt-4" id="demoCard">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Credenziali Demo
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <p class="small mb-2">
+                        Puoi utilizzare queste credenziali per testare l'applicazione:
+                    </p>
+                    <div class="demo-credentials">
+                        <div class="mb-2">
+                            <strong>Email:</strong> 
+                            <code class="user-select-all">demo@careerguida.com</code>
+                            <button class="btn btn-sm btn-outline-secondary ms-2" onclick="fillDemoCredentials()">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <div>
+                            <strong>Password:</strong> 
+                            <code class="user-select-all">demo123456</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Forgot Password Modal -->
+<div class="modal fade" id="forgotPasswordModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-key me-2"></i>
+                    Recupero Password
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted mb-4">
+                    Inserisci il tuo indirizzo email e ti invieremo un link per reimpostare la password.
+                </p>
+                <form id="forgotPasswordForm">
+                    <div class="mb-3">
+                        <label for="resetEmail" class="form-label">Email</label>
+                        <input 
+                            type="email" 
+                            class="form-control" 
+                            id="resetEmail" 
+                            name="resetEmail"
+                            placeholder="Inserisci la tua email"
+                            required
+                        >
+                        <div class="invalid-feedback" id="resetEmailError"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Annulla
+                </button>
+                <button type="button" class="btn btn-primary" onclick="handleForgotPassword()">
+                    <i class="fas fa-paper-plane me-2"></i>
+                    Invia Link
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.demo-credentials {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #17a2b8;
+}
+
+.input-group .btn {
+    border-left: 0;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+.is-invalid {
+    border-color: #dc3545;
+}
+
+.is-valid {
+    border-color: #28a745;
+}
+
+@media (max-width: 576px) {
+    .card {
+        margin: 1rem;
+    }
+    
+    .card-body {
+        padding: 2rem 1.5rem;
+    }
+    
+    #demoCard {
+        margin: 1rem;
+    }
+}
+</style>
+
+<script>
+// Login form specific functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Add real-time validation
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    
+    if (emailInput) {
+        emailInput.addEventListener('blur', validateEmailField);
+        emailInput.addEventListener('input', clearEmailError);
+    }
+    
+    if (passwordInput) {
+        passwordInput.addEventListener('blur', validatePasswordField);
+        passwordInput.addEventListener('input', clearPasswordError);
+    }
+});
+
+function validateEmailField() {
+    const emailInput = document.getElementById('email');
+    const emailError = document.getElementById('emailError');
+    
+    if (!emailInput.value) {
+        emailInput.classList.add('is-invalid');
+        emailError.textContent = 'Email è obbligatoria';
+        return false;
+    }
+    
+    if (!Utils.validateEmail(emailInput.value)) {
+        emailInput.classList.add('is-invalid');
+        emailError.textContent = 'Formato email non valido';
+        return false;
+    }
+    
+    emailInput.classList.remove('is-invalid');
+    emailInput.classList.add('is-valid');
+    emailError.textContent = '';
+    return true;
+}
+
+function validatePasswordField() {
+    const passwordInput = document.getElementById('password');
+    const passwordError = document.getElementById('passwordError');
+    
+    if (!passwordInput.value) {
+        passwordInput.classList.add('is-invalid');
+        passwordError.textContent = 'Password è obbligatoria';
+        return false;
+    }
+    
+    if (passwordInput.value.length < 6) {
+        passwordInput.classList.add('is-invalid');
+        passwordError.textContent = 'Password deve essere di almeno 6 caratteri';
+        return false;
+    }
+    
+    passwordInput.classList.remove('is-invalid');
+    passwordInput.classList.add('is-valid');
+    passwordError.textContent = '';
+    return true;
+}
+
+function clearEmailError() {
+    const emailInput = document.getElementById('email');
+    const emailError = document.getElementById('emailError');
+    emailInput.classList.remove('is-invalid', 'is-valid');
+    emailError.textContent = '';
+}
+
+function clearPasswordError() {
+    const passwordInput = document.getElementById('password');
+    const passwordError = document.getElementById('passwordError');
+    passwordInput.classList.remove('is-invalid', 'is-valid');
+    passwordError.textContent = '';
+}
+
+function togglePasswordVisibility() {
+    const passwordInput = document.getElementById('password');
+    const passwordIcon = document.getElementById('passwordIcon');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        passwordIcon.classList.remove('fa-eye');
+        passwordIcon.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        passwordIcon.classList.remove('fa-eye-slash');
+        passwordIcon.classList.add('fa-eye');
+    }
+}
+
+function fillDemoCredentials() {
+    document.getElementById('email').value = 'demo@careerguida.com';
+    document.getElementById('password').value = 'demo123456';
+    
+    // Clear any existing validation states
+    clearEmailError();
+    clearPasswordError();
+    
+    showToast('Credenziali demo inserite!', 'info');
+}
+
+function showForgotPassword() {
+    const modal = new bootstrap.Modal(document.getElementById('forgotPasswordModal'));
+    modal.show();
+}
+
+async function handleForgotPassword() {
+    try {
+        const resetEmailInput = document.getElementById('resetEmail');
+        const resetEmailError = document.getElementById('resetEmailError');
+        const email = resetEmailInput.value.trim();
+        
+        // Reset previous errors
+        resetEmailInput.classList.remove('is-invalid');
+        resetEmailError.textContent = '';
+        
+        if (!email) {
+            resetEmailInput.classList.add('is-invalid');
+            resetEmailError.textContent = 'Email è obbligatoria';
+            return;
+        }
+        
+        if (!Utils.validateEmail(email)) {
+            resetEmailInput.classList.add('is-invalid');
+            resetEmailError.textContent = 'Formato email non valido';
+            return;
+        }
+        
+        showLoading();
+        
+        // Call Supabase password reset
+        const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+            redirectTo: `${window.location.origin}/reset-password`
+        });
+        
+        if (error) {
+            console.error('Password reset error:', error);
+            showToast('Errore durante l\'invio dell\'email di reset', 'error');
+            return;
+        }
+        
+        // Close modal and show success message
+        const modal = bootstrap.Modal.getInstance(document.getElementById('forgotPasswordModal'));
+        modal.hide();
+        
+        showToast('Email di reset password inviata! Controlla la tua casella di posta.', 'success');
+        
+        // Clear form
+        resetEmailInput.value = '';
+        
+    } catch (error) {
+        console.error('Unexpected error during password reset:', error);
+        showToast('Errore durante l\'invio dell\'email di reset', 'error');
+    } finally {
+        hideLoading();
+    }
+}
+
+// Handle form submission with Enter key
+document.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter' && (e.target.closest('#loginForm') || e.target.closest('#forgotPasswordForm'))) {
+        e.preventDefault();
+        if (e.target.closest('#loginForm')) {
+            document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+        } else if (e.target.closest('#forgotPasswordForm')) {
+            handleForgotPassword();
+        }
+    }
+});
+</script>

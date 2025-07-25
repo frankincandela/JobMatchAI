@@ -1,0 +1,589 @@
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Header -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h4 class="card-title mb-2">
+                                <i class="fas fa-user-edit me-2 text-primary"></i>
+                                Il Tuo Profilo Professionale
+                            </h4>
+                            <p class="text-muted mb-0">
+                                Completa il tuo profilo per ricevere consigli personalizzati e opportunità su misura
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <button class="btn btn-success" id="analyzeProfile">
+                                <i class="fas fa-brain me-2"></i>
+                                Analisi AI
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Form -->
+            <form id="profileForm" novalidate>
+                <!-- Biography Section -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-user-circle me-2"></i>
+                            Biografia e Aspirazioni
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="biography" class="form-label">
+                                Parlaci di te e delle tue aspirazioni professionali *
+                            </label>
+                            <textarea 
+                                class="form-control" 
+                                id="biography" 
+                                name="biography" 
+                                rows="6"
+                                placeholder="Descrivi la tua personalità, i tuoi interessi, le tue aspirazioni professionali, i settori che ti attraggono e i tuoi obiettivi di carriera. Sii dettagliato per ottenere consigli più precisi dall'IA."
+                                required
+                            ></textarea>
+                            <div class="form-text">
+                                <span id="biographyCount">0</span>/2000 caratteri | 
+                                Minimo 50 caratteri per l'analisi AI
+                            </div>
+                            <div class="invalid-feedback" id="biographyError"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Work Experience Section -->
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-briefcase me-2"></i>
+                            Esperienze Lavorative
+                        </h5>
+                        <button type="button" class="btn btn-outline-primary btn-sm" id="addExperience">
+                            <i class="fas fa-plus me-1"></i>
+                            Aggiungi Esperienza
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div id="experiencesContainer">
+                            <div class="text-center py-4 text-muted" id="noExperiencesMessage">
+                                <i class="fas fa-briefcase fa-2x mb-3"></i>
+                                <p>Nessuna esperienza lavorativa aggiunta</p>
+                                <p class="small">Clicca "Aggiungi Esperienza" per iniziare</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Education Section -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-graduation-cap me-2"></i>
+                            Formazione ed Educazione
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="education" class="form-label">
+                                Descrivi il tuo percorso di studi
+                            </label>
+                            <textarea 
+                                class="form-control" 
+                                id="education" 
+                                name="education" 
+                                rows="4"
+                                placeholder="Inserisci informazioni sui tuoi studi: titolo di studio, università/scuola, voti significativi, tesi, corsi specialistici, etc."
+                            ></textarea>
+                            <div class="form-text">
+                                Include titoli di studio, istituzioni, specializzazioni e risultati rilevanti
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skills Section -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-cogs me-2"></i>
+                            Competenze Trasversali
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="softSkills" class="form-label">
+                                Le tue competenze trasversali e soft skills
+                            </label>
+                            <textarea 
+                                class="form-control" 
+                                id="softSkills" 
+                                name="softSkills" 
+                                rows="4"
+                                placeholder="Es: leadership, problem solving, comunicazione, lavoro di squadra, creatività, gestione del tempo, adattabilità, etc."
+                            ></textarea>
+                            <div class="form-text">
+                                Descrivi le tue capacità personali e relazionali
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Certifications Section -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-certificate me-2"></i>
+                            Certificazioni e Qualifiche
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="certifications" class="form-label">
+                                Certificazioni, corsi e qualifiche ottenute
+                            </label>
+                            <textarea 
+                                class="form-control" 
+                                id="certifications" 
+                                name="certifications" 
+                                rows="4"
+                                placeholder="Es: certificazioni informatiche, corsi di lingua, patenti professionali, attestati di partecipazione, etc."
+                            ></textarea>
+                            <div class="form-text">
+                                Includi tutte le certificazioni rilevanti per la tua carriera
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- References Section -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-users me-2"></i>
+                            Referenze Professionali
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="professionalReferences" class="form-label">
+                                Referenze e raccomandazioni
+                            </label>
+                            <textarea 
+                                class="form-control" 
+                                id="professionalReferences" 
+                                name="professionalReferences" 
+                                rows="3"
+                                placeholder="Contatti di supervisori, colleghi o clienti che possono fornire referenze (opzionale)"
+                            ></textarea>
+                            <div class="form-text">
+                                Include nome, ruolo, azienda e contatto (se autorizzato)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hobbies Section -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-heart me-2"></i>
+                            Hobby e Interessi
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="hobbies" class="form-label">
+                                I tuoi hobby e interessi personali
+                            </label>
+                            <textarea 
+                                class="form-control" 
+                                id="hobbies" 
+                                name="hobbies" 
+                                rows="3"
+                                placeholder="Es: sport, musica, lettura, volontariato, viaggi, arte, cucina, tecnologia, etc."
+                            ></textarea>
+                            <div class="form-text">
+                                Gli hobby possono rivelare competenze trasferibili al mondo del lavoro
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CV Upload Section -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-file-pdf me-2"></i>
+                            Carica il tuo CV
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="cv-upload-area" id="cvUploadArea">
+                            <div class="text-center">
+                                <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3 upload-icon"></i>
+                                <div class="upload-text">
+                                    <h5>Trascina qui il tuo CV o clicca per selezionare</h5>
+                                    <p class="text-muted">Formati supportati: PDF, DOC, DOCX (max 10MB)</p>
+                                </div>
+                                <input type="file" id="cvFileInput" accept=".pdf,.doc,.docx" style="display: none;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Salva il tuo profilo</h6>
+                                <small class="text-muted">Le informazioni verranno salvate in modo sicuro</small>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-outline-secondary me-2" onclick="showDashboard()">
+                                    <i class="fas fa-times me-2"></i>
+                                    Annulla
+                                </button>
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-save me-2"></i>
+                                    Salva Profilo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-lg-4">
+            <!-- Progress Card -->
+            <div class="card mb-4 sticky-top" style="top: 100px;">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-chart-pie me-2"></i>
+                        Completamento Profilo
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <div class="progress-circle" id="progressCircle">
+                            <span class="progress-text" id="progressText">0%</span>
+                        </div>
+                    </div>
+                    <div class="completion-items">
+                        <div class="completion-item" id="completionBiography">
+                            <i class="fas fa-circle text-muted me-2"></i>
+                            <span>Biografia</span>
+                        </div>
+                        <div class="completion-item" id="completionExperience">
+                            <i class="fas fa-circle text-muted me-2"></i>
+                            <span>Esperienza</span>
+                        </div>
+                        <div class="completion-item" id="completionEducation">
+                            <i class="fas fa-circle text-muted me-2"></i>
+                            <span>Formazione</span>
+                        </div>
+                        <div class="completion-item" id="completionSkills">
+                            <i class="fas fa-circle text-muted me-2"></i>
+                            <span>Competenze</span>
+                        </div>
+                        <div class="completion-item" id="completionCV">
+                            <i class="fas fa-circle text-muted me-2"></i>
+                            <span>CV Caricato</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tips Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-lightbulb me-2"></i>
+                        Consigli per un Profilo Efficace
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="tip-item mb-3">
+                        <div class="tip-icon">
+                            <i class="fas fa-pencil-alt text-primary"></i>
+                        </div>
+                        <div class="tip-content">
+                            <h6>Sii Specifico</h6>
+                            <p class="small text-muted">Più dettagli fornisci, più precisi saranno i consigli dell'IA</p>
+                        </div>
+                    </div>
+                    <div class="tip-item mb-3">
+                        <div class="tip-icon">
+                            <i class="fas fa-target text-success"></i>
+                        </div>
+                        <div class="tip-content">
+                            <h6>Obiettivi Chiari</h6>
+                            <p class="small text-muted">Definisci chiaramente i tuoi obiettivi professionali</p>
+                        </div>
+                    </div>
+                    <div class="tip-item">
+                        <div class="tip-icon">
+                            <i class="fas fa-sync text-info"></i>
+                        </div>
+                        <div class="tip-content">
+                            <h6>Aggiorna Regolarmente</h6>
+                            <p class="small text-muted">Mantieni il profilo aggiornato con nuove esperienze</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Analysis Results -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div id="aiAnalysisResults" style="display: none;">
+                <!-- AI analysis results will be displayed here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.cv-upload-area {
+    border: 3px dashed #dee2e6;
+    border-radius: 12px;
+    padding: 3rem 2rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    background: rgba(102, 126, 234, 0.02);
+}
+
+.cv-upload-area:hover {
+    border-color: var(--primary-color);
+    background: rgba(102, 126, 234, 0.05);
+}
+
+.cv-upload-area.dragover {
+    border-color: var(--success-color);
+    background: rgba(76, 175, 80, 0.1);
+}
+
+.cv-upload-area.uploaded {
+    border-color: var(--success-color);
+    background: rgba(76, 175, 80, 0.1);
+}
+
+.progress-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: conic-gradient(var(--primary-color) 0deg, #e9ecef 0deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    position: relative;
+}
+
+.progress-circle::before {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: white;
+}
+
+.progress-text {
+    position: relative;
+    z-index: 1;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.completion-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.completion-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.completion-item.completed i {
+    color: var(--success-color) !important;
+}
+
+.tip-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.tip-icon {
+    flex-shrink: 0;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: rgba(102, 126, 234, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tip-content {
+    flex: 1;
+}
+
+.tip-content h6 {
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 992px) {
+    .sticky-top {
+        position: static !important;
+        top: auto !important;
+    }
+}
+</style>
+
+<script>
+// Profile form specific functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Character counter for biography
+    const biographyTextarea = document.getElementById('biography');
+    const biographyCount = document.getElementById('biographyCount');
+    
+    if (biographyTextarea && biographyCount) {
+        biographyTextarea.addEventListener('input', function() {
+            const count = this.value.length;
+            biographyCount.textContent = count;
+            
+            // Update character count color
+            if (count < 50) {
+                biographyCount.className = 'text-warning';
+            } else if (count > 1800) {
+                biographyCount.className = 'text-danger';
+            } else {
+                biographyCount.className = 'text-success';
+            }
+            
+            updateProgress();
+        });
+    }
+    
+    // Update progress on any input change
+    const formInputs = document.querySelectorAll('#profileForm input, #profileForm textarea');
+    formInputs.forEach(input => {
+        input.addEventListener('input', updateProgress);
+    });
+    
+    // Initial progress update
+    updateProgress();
+});
+
+function updateProgress() {
+    let completedItems = 0;
+    const totalItems = 5;
+    
+    // Check biography
+    const biography = document.getElementById('biography').value.trim();
+    const biographyItem = document.getElementById('completionBiography');
+    if (biography.length >= 50) {
+        biographyItem.classList.add('completed');
+        biographyItem.querySelector('i').className = 'fas fa-check-circle text-success me-2';
+        completedItems++;
+    } else {
+        biographyItem.classList.remove('completed');
+        biographyItem.querySelector('i').className = 'fas fa-circle text-muted me-2';
+    }
+    
+    // Check experiences
+    const experienceItems = document.querySelectorAll('.experience-item');
+    const experienceItem = document.getElementById('completionExperience');
+    if (experienceItems.length > 0) {
+        experienceItem.classList.add('completed');
+        experienceItem.querySelector('i').className = 'fas fa-check-circle text-success me-2';
+        completedItems++;
+    } else {
+        experienceItem.classList.remove('completed');
+        experienceItem.querySelector('i').className = 'fas fa-circle text-muted me-2';
+    }
+    
+    // Check education
+    const education = document.getElementById('education').value.trim();
+    const educationItem = document.getElementById('completionEducation');
+    if (education.length > 0) {
+        educationItem.classList.add('completed');
+        educationItem.querySelector('i').className = 'fas fa-check-circle text-success me-2';
+        completedItems++;
+    } else {
+        educationItem.classList.remove('completed');
+        educationItem.querySelector('i').className = 'fas fa-circle text-muted me-2';
+    }
+    
+    // Check skills
+    const skills = document.getElementById('softSkills').value.trim();
+    const skillsItem = document.getElementById('completionSkills');
+    if (skills.length > 0) {
+        skillsItem.classList.add('completed');
+        skillsItem.querySelector('i').className = 'fas fa-check-circle text-success me-2';
+        completedItems++;
+    } else {
+        skillsItem.classList.remove('completed');
+        skillsItem.querySelector('i').className = 'fas fa-circle text-muted me-2';
+    }
+    
+    // Check CV
+    const cvUploadArea = document.getElementById('cvUploadArea');
+    const cvItem = document.getElementById('completionCV');
+    if (cvUploadArea.classList.contains('uploaded') || cvUploadArea.dataset.cvPath) {
+        cvItem.classList.add('completed');
+        cvItem.querySelector('i').className = 'fas fa-check-circle text-success me-2';
+        completedItems++;
+    } else {
+        cvItem.classList.remove('completed');
+        cvItem.querySelector('i').className = 'fas fa-circle text-muted me-2';
+    }
+    
+    // Update progress circle
+    const percentage = Math.round((completedItems / totalItems) * 100);
+    const progressCircle = document.getElementById('progressCircle');
+    const progressText = document.getElementById('progressText');
+    
+    if (progressCircle && progressText) {
+        const degrees = (percentage / 100) * 360;
+        progressCircle.style.background = `conic-gradient(var(--primary-color) ${degrees}deg, #e9ecef ${degrees}deg)`;
+        progressText.textContent = `${percentage}%`;
+    }
+}
+
+// Hide the "no experiences" message when experiences are added
+function updateExperiencesVisibility() {
+    const container = document.getElementById('experiencesContainer');
+    const noExperiencesMessage = document.getElementById('noExperiencesMessage');
+    const experienceItems = container.querySelectorAll('.experience-item');
+    
+    if (experienceItems.length > 0) {
+        noExperiencesMessage.style.display = 'none';
+    } else {
+        noExperiencesMessage.style.display = 'block';
+    }
+    
+    updateProgress();
+}
+
+// Override the addExperienceField function to update visibility
+const originalAddExperienceField = ProfileService.addExperienceField;
+ProfileService.addExperienceField = function() {
+    originalAddExperienceField.call(this);
+    updateExperiencesVisibility();
+};
+</script>

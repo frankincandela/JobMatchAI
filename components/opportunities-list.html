@@ -1,0 +1,1102 @@
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-lg-8">
+            <h2 class="mb-2">
+                <i class="fas fa-briefcase me-2 text-primary"></i>
+                Opportunità Professionali
+            </h2>
+            <p class="text-muted mb-0">
+                Scopri le opportunità più adatte al tuo profilo professionale
+            </p>
+        </div>
+        <div class="col-lg-4 text-lg-end">
+            <div class="d-flex gap-2 justify-content-lg-end">
+                <button class="btn btn-outline-primary" id="refreshOpportunities">
+                    <i class="fas fa-sync-alt me-1"></i>
+                    Aggiorna
+                </button>
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" 
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-sort me-1"></i>
+                        Ordina
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#" onclick="sortOpportunities('match')">
+                            <i class="fas fa-percentage me-2"></i>Per Match Score
+                        </a></li>
+                        <li><a class="dropdown-item" href="#" onclick="sortOpportunities('date')">
+                            <i class="fas fa-calendar me-2"></i>Per Data
+                        </a></li>
+                        <li><a class="dropdown-item" href="#" onclick="sortOpportunities('salary')">
+                            <i class="fas fa-euro-sign me-2"></i>Per Stipendio
+                        </a></li>
+                        <li><a class="dropdown-item" href="#" onclick="sortOpportunities('company')">
+                            <i class="fas fa-building me-2"></i>Per Azienda
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Filters Sidebar -->
+        <div class="col-lg-3 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-filter me-2"></i>
+                        Filtri di Ricerca
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <!-- Search -->
+                    <div class="mb-3">
+                        <label for="searchOpportunities" class="form-label">
+                            <i class="fas fa-search me-1"></i>
+                            Ricerca per parole chiave
+                        </label>
+                        <input type="text" class="form-control" id="searchOpportunities" 
+                               placeholder="Titolo, azienda, competenze...">
+                    </div>
+
+                    <!-- Opportunity Type -->
+                    <div class="mb-3">
+                        <label for="typeFilter" class="form-label">
+                            <i class="fas fa-briefcase me-1"></i>
+                            Tipo di Opportunità
+                        </label>
+                        <select class="form-select" id="typeFilter">
+                            <option value="all">Tutte le opportunità</option>
+                            <option value="job">Lavoro</option>
+                            <option value="training">Formazione</option>
+                            <option value="internship">Stage</option>
+                        </select>
+                    </div>
+
+                    <!-- Sector -->
+                    <div class="mb-3">
+                        <label for="sectorFilter" class="form-label">
+                            <i class="fas fa-industry me-1"></i>
+                            Settore
+                        </label>
+                        <select class="form-select" id="sectorFilter">
+                            <option value="all">Tutti i settori</option>
+                            <option value="Informatica">Informatica</option>
+                            <option value="Ristorazione">Ristorazione</option>
+                            <option value="Accoglienza">Accoglienza</option>
+                            <option value="Agricoltura">Agricoltura</option>
+                            <option value="Imprenditoria">Imprenditoria</option>
+                        </select>
+                    </div>
+
+                    <!-- Location -->
+                    <div class="mb-3">
+                        <label for="locationFilter" class="form-label">
+                            <i class="fas fa-map-marker-alt me-1"></i>
+                            Località
+                        </label>
+                        <select class="form-select" id="locationFilter">
+                            <option value="all">Tutte le località</option>
+                            <option value="remote">Lavoro remoto</option>
+                            <option value="Milano">Milano</option>
+                            <option value="Roma">Roma</option>
+                            <option value="Napoli">Napoli</option>
+                            <option value="Torino">Torino</option>
+                            <option value="Bologna">Bologna</option>
+                            <option value="Firenze">Firenze</option>
+                        </select>
+                    </div>
+
+                    <!-- Experience Level -->
+                    <div class="mb-3">
+                        <label for="experienceFilter" class="form-label">
+                            <i class="fas fa-chart-line me-1"></i>
+                            Livello di Esperienza
+                        </label>
+                        <select class="form-select" id="experienceFilter">
+                            <option value="all">Tutti i livelli</option>
+                            <option value="entry">Principiante</option>
+                            <option value="junior">Junior</option>
+                            <option value="mid">Intermedio</option>
+                            <option value="senior">Senior</option>
+                        </select>
+                    </div>
+
+                    <!-- Job Type -->
+                    <div class="mb-3">
+                        <label for="jobTypeFilter" class="form-label">
+                            <i class="fas fa-clock me-1"></i>
+                            Tipo di Contratto
+                        </label>
+                        <select class="form-select" id="jobTypeFilter">
+                            <option value="all">Tutti i tipi</option>
+                            <option value="full-time">Tempo pieno</option>
+                            <option value="part-time">Part-time</option>
+                            <option value="contract">Contratto</option>
+                            <option value="internship">Stage</option>
+                        </select>
+                    </div>
+
+                    <!-- Salary Range -->
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="fas fa-euro-sign me-1"></i>
+                            Fascia Salariale (€/anno)
+                        </label>
+                        <div class="row">
+                            <div class="col-6">
+                                <input type="number" class="form-control form-control-sm" 
+                                       id="salaryMin" placeholder="Min" min="0">
+                            </div>
+                            <div class="col-6">
+                                <input type="number" class="form-control form-control-sm" 
+                                       id="salaryMax" placeholder="Max" min="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Saved Only Filter -->
+                    <div class="mb-3" id="savedOnlySection" style="display: none;">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="savedOnlyFilter">
+                            <label class="form-check-label" for="savedOnlyFilter">
+                                <i class="fas fa-heart text-danger me-1"></i>
+                                Solo opportunità salvate
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Clear Filters -->
+                    <div class="d-grid">
+                        <button class="btn btn-outline-secondary btn-sm" id="clearFilters">
+                            <i class="fas fa-eraser me-1"></i>
+                            Cancella Filtri
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Summary -->
+            <div class="card mt-3" id="activeFiltersCard" style="display: none;">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-tags me-2"></i>
+                        Filtri Attivi
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div id="activeFiltersList">
+                        <!-- Active filters will be shown here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Opportunities List -->
+        <div class="col-lg-9">
+            <!-- Results Header -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h5 class="mb-1" id="resultsCount">Caricamento opportunità...</h5>
+                    <small class="text-muted" id="resultsSubtext">Stiamo cercando le migliori opportunità per te</small>
+                </div>
+                <div class="view-toggle">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-outline-secondary active" 
+                                id="gridViewBtn" onclick="switchView('grid')">
+                            <i class="fas fa-th-large"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" 
+                                id="listViewBtn" onclick="switchView('list')">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div class="loading-opportunities" id="loadingOpportunities">
+                <div class="row">
+                    <div class="col-md-6 col-lg-4 mb-4" v-for="n in 6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-3">
+                                    <div class="placeholder-glow">
+                                        <span class="placeholder col-6"></span>
+                                    </div>
+                                    <div class="placeholder-glow">
+                                        <span class="placeholder col-4"></span>
+                                    </div>
+                                </div>
+                                <div class="placeholder-glow">
+                                    <span class="placeholder col-8"></span>
+                                    <span class="placeholder col-6"></span>
+                                    <span class="placeholder col-10"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Opportunities Container -->
+            <div class="opportunities-container" id="opportunitiesContainer" style="display: none;">
+                <!-- Opportunities will be rendered here -->
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-opportunities" id="emptyOpportunities" style="display: none;">
+                <div class="text-center py-5">
+                    <i id="emptyIcon" class="fas fa-search fa-4x text-muted mb-4"></i>
+                    <h4 id="emptyTitle">Nessuna opportunità trovata</h4>
+                    <p class="text-muted mb-4" id="emptyMessage">
+                        Prova a modificare i filtri di ricerca per trovare più opportunità
+                    </p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <button class="btn btn-outline-primary" onclick="clearAllFilters()">
+                            <i class="fas fa-eraser me-2"></i>
+                            Cancella tutti i filtri
+                        </button>
+                        <button class="btn btn-primary" onclick="showProfile()">
+                            <i class="fas fa-user-edit me-2"></i>
+                            Completa il profilo
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <nav id="opportunitiesPagination" style="display: none;">
+                <ul class="pagination justify-content-center">
+                    <!-- Pagination will be generated here -->
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<style>
+.view-toggle .btn {
+    border-radius: 6px;
+}
+
+.view-toggle .btn.active {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.opportunities-container.list-view .opportunity-card {
+    margin-bottom: 1rem;
+}
+
+.opportunities-container.list-view .opportunity-card .card-body {
+    padding: 1.5rem;
+}
+
+.opportunities-container.list-view .row {
+    margin: 0;
+}
+
+.opportunities-container.list-view .col-lg-6,
+.opportunities-container.list-view .col-xl-4 {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding: 0;
+}
+
+.placeholder-glow .placeholder {
+    animation: placeholder-glow 2s ease-in-out infinite alternate;
+    background: linear-gradient(90deg, #f8f9fa 25%, #e9ecef 50%, #f8f9fa 75%);
+    background-size: 200% 100%;
+    border-radius: 4px;
+    display: inline-block;
+    height: 1em;
+}
+
+@keyframes placeholder-glow {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+.filter-tag {
+    display: inline-block;
+    background: var(--primary-color);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    margin: 0.25rem;
+    position: relative;
+}
+
+.filter-tag .remove-filter {
+    margin-left: 0.5rem;
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.filter-tag .remove-filter:hover {
+    opacity: 1;
+}
+
+.opportunity-match-highlight {
+    border-left: 4px solid var(--success-color) !important;
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.05) 0%, rgba(139, 195, 74, 0.05) 100%);
+}
+
+.opportunity-new-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: var(--warning-color);
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: bold;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.opportunities-container.list-view .opportunity-card {
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.opportunities-container.list-view .opportunity-card:hover {
+    transform: translateX(8px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 992px) {
+    .view-toggle {
+        display: none;
+    }
+    
+    .opportunities-container {
+        padding-top: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .filter-sidebar {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100vh;
+        background: white;
+        z-index: 1050;
+        transition: left 0.3s ease;
+        overflow-y: auto;
+    }
+    
+    .filter-sidebar.show {
+        left: 0;
+    }
+}
+</style>
+
+<script>
+// Extended OpportunityService functionality
+class OpportunityListComponent {
+    constructor() {
+        this.currentView = 'grid';
+        this.currentSort = 'match';
+        this.currentPage = 1;
+        this.itemsPerPage = 12;
+        this.totalItems = 0;
+        this.activeFilters = {};
+        this.init();
+    }
+
+    init() {
+        this.setupEventListeners();
+        this.loadOpportunities();
+        
+        // Show saved only filter if user is logged in
+        if (AuthService.currentUser) {
+            document.getElementById('savedOnlySection').style.display = 'block';
+        }
+    }
+
+    setupEventListeners() {
+        // Search input with debounce
+        const searchInput = document.getElementById('searchOpportunities');
+        let searchTimeout;
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                this.handleFilterChange();
+            }, 300);
+        });
+
+        // All filter selects
+        const filterElements = [
+            'typeFilter', 'sectorFilter', 'locationFilter', 
+            'experienceFilter', 'jobTypeFilter', 'savedOnlyFilter'
+        ];
+
+        filterElements.forEach(elementId => {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.addEventListener('change', () => this.handleFilterChange());
+            }
+        });
+
+        // Salary range inputs
+        const salaryMin = document.getElementById('salaryMin');
+        const salaryMax = document.getElementById('salaryMax');
+        
+        let salaryTimeout;
+        [salaryMin, salaryMax].forEach(input => {
+            if (input) {
+                input.addEventListener('input', () => {
+                    clearTimeout(salaryTimeout);
+                    salaryTimeout = setTimeout(() => {
+                        this.handleFilterChange();
+                    }, 500);
+                });
+            }
+        });
+
+        // Clear filters button
+        const clearFiltersBtn = document.getElementById('clearFilters');
+        clearFiltersBtn.addEventListener('click', () => this.clearAllFilters());
+
+        // Refresh button
+        const refreshBtn = document.getElementById('refreshOpportunities');
+        refreshBtn.addEventListener('click', () => this.refreshOpportunities());
+    }
+
+    async loadOpportunities() {
+        try {
+            this.showLoading();
+            
+            // Load opportunities using the existing service
+            await OpportunityService.loadOpportunities();
+            
+            this.applyFiltersAndSort();
+            
+        } catch (error) {
+            console.error('Error loading opportunities:', error);
+            this.showError('Errore nel caricamento delle opportunità');
+        }
+    }
+
+    showLoading() {
+        document.getElementById('loadingOpportunities').style.display = 'block';
+        document.getElementById('opportunitiesContainer').style.display = 'none';
+        document.getElementById('emptyOpportunities').style.display = 'none';
+        
+        this.updateResultsCount('Caricamento...', 'Stiamo cercando le migliori opportunità per te');
+    }
+
+    showError(message) {
+        document.getElementById('loadingOpportunities').style.display = 'none';
+        document.getElementById('opportunitiesContainer').style.display = 'none';
+        
+        const emptyState = document.getElementById('emptyOpportunities');
+        emptyState.style.display = 'block';
+        
+        document.getElementById('emptyIcon').className = 'fas fa-exclamation-triangle fa-4x text-danger mb-4';
+        document.getElementById('emptyTitle').textContent = 'Errore di Caricamento';
+        document.getElementById('emptyMessage').textContent = message;
+    }
+
+    handleFilterChange() {
+        this.collectActiveFilters();
+        this.currentPage = 1; // Reset to first page
+        this.applyFiltersAndSort();
+        this.updateActiveFiltersDisplay();
+    }
+
+    collectActiveFilters() {
+        this.activeFilters = {};
+
+        // Search
+        const search = document.getElementById('searchOpportunities').value.trim();
+        if (search) this.activeFilters.search = search;
+
+        // Dropdowns
+        const filterMappings = {
+            typeFilter: 'type',
+            sectorFilter: 'sector',
+            locationFilter: 'location',
+            experienceFilter: 'experience',
+            jobTypeFilter: 'jobType'
+        };
+
+        Object.entries(filterMappings).forEach(([elementId, filterKey]) => {
+            const element = document.getElementById(elementId);
+            if (element && element.value !== 'all') {
+                this.activeFilters[filterKey] = element.value;
+            }
+        });
+
+        // Salary range
+        const salaryMin = document.getElementById('salaryMin').value;
+        const salaryMax = document.getElementById('salaryMax').value;
+        if (salaryMin) this.activeFilters.salaryMin = parseInt(salaryMin);
+        if (salaryMax) this.activeFilters.salaryMax = parseInt(salaryMax);
+
+        // Saved only
+        const savedOnly = document.getElementById('savedOnlyFilter').checked;
+        if (savedOnly) this.activeFilters.savedOnly = true;
+    }
+
+    applyFiltersAndSort() {
+        let filtered = [...OpportunityService.opportunities];
+
+        // Apply filters
+        Object.entries(this.activeFilters).forEach(([key, value]) => {
+            filtered = this.applyFilter(filtered, key, value);
+        });
+
+        // Apply sorting
+        filtered = this.sortOpportunities(filtered, this.currentSort);
+
+        // Update total count
+        this.totalItems = filtered.length;
+
+        // Apply pagination
+        const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+        const paginatedResults = filtered.slice(startIndex, startIndex + this.itemsPerPage);
+
+        // Render results
+        this.renderOpportunities(paginatedResults);
+        this.updateResultsCount(`${this.totalItems} opportunità trovate`, this.getResultsSubtext());
+        this.renderPagination();
+
+        // Show appropriate state
+        if (this.totalItems === 0) {
+            this.showEmptyState();
+        } else {
+            document.getElementById('loadingOpportunities').style.display = 'none';
+            document.getElementById('opportunitiesContainer').style.display = 'block';
+            document.getElementById('emptyOpportunities').style.display = 'none';
+        }
+    }
+
+    applyFilter(opportunities, filterKey, filterValue) {
+        switch (filterKey) {
+            case 'search':
+                return opportunities.filter(opp => 
+                    opp.title.toLowerCase().includes(filterValue.toLowerCase()) ||
+                    opp.companyName.toLowerCase().includes(filterValue.toLowerCase()) ||
+                    opp.description.toLowerCase().includes(filterValue.toLowerCase()) ||
+                    opp.sector.toLowerCase().includes(filterValue.toLowerCase()) ||
+                    (opp.requiredSkills && opp.requiredSkills.some(skill => 
+                        skill.toLowerCase().includes(filterValue.toLowerCase())
+                    ))
+                );
+
+            case 'type':
+                if (filterValue === 'job') {
+                    return opportunities.filter(opp => 
+                        ['full-time', 'part-time', 'contract'].includes(opp.jobType)
+                    );
+                } else if (filterValue === 'training') {
+                    return opportunities.filter(opp => opp.jobType === 'training');
+                } else if (filterValue === 'internship') {
+                    return opportunities.filter(opp => opp.jobType === 'internship');
+                }
+                return opportunities;
+
+            case 'sector':
+                return opportunities.filter(opp => opp.sector === filterValue);
+
+            case 'location':
+                if (filterValue === 'remote') {
+                    return opportunities.filter(opp => opp.isRemote);
+                }
+                return opportunities.filter(opp => 
+                    opp.location.toLowerCase().includes(filterValue.toLowerCase())
+                );
+
+            case 'experience':
+                return opportunities.filter(opp => opp.experienceLevel === filterValue);
+
+            case 'jobType':
+                return opportunities.filter(opp => opp.jobType === filterValue);
+
+            case 'salaryMin':
+                return opportunities.filter(opp => 
+                    opp.salaryMin && opp.salaryMin >= filterValue
+                );
+
+            case 'salaryMax':
+                return opportunities.filter(opp => 
+                    opp.salaryMax && opp.salaryMax <= filterValue
+                );
+
+            case 'savedOnly':
+                if (AuthService.currentUser && AuthService.currentUser.savedOpportunities) {
+                    return opportunities.filter(opp => 
+                        AuthService.currentUser.savedOpportunities.includes(opp.id)
+                    );
+                }
+                return opportunities;
+
+            default:
+                return opportunities;
+        }
+    }
+
+    sortOpportunities(opportunities, sortBy) {
+        switch (sortBy) {
+            case 'match':
+                return opportunities.sort((a, b) => b.matchScore - a.matchScore);
+            case 'date':
+                return opportunities.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            case 'salary':
+                return opportunities.sort((a, b) => {
+                    const avgA = a.salaryMin && a.salaryMax ? (a.salaryMin + a.salaryMax) / 2 : 0;
+                    const avgB = b.salaryMin && b.salaryMax ? (b.salaryMin + b.salaryMax) / 2 : 0;
+                    return avgB - avgA;
+                });
+            case 'company':
+                return opportunities.sort((a, b) => a.companyName.localeCompare(b.companyName));
+            default:
+                return opportunities;
+        }
+    }
+
+    renderOpportunities(opportunities) {
+        const container = document.getElementById('opportunitiesContainer');
+        container.className = `opportunities-container ${this.currentView}-view`;
+
+        if (opportunities.length === 0) {
+            container.innerHTML = '';
+            return;
+        }
+
+        const isListView = this.currentView === 'list';
+        const colClass = isListView ? 'col-12' : 'col-lg-6 col-xl-4';
+
+        const html = opportunities.map(opportunity => {
+            const isHighMatch = opportunity.matchScore >= 80;
+            const isSaved = AuthService.currentUser && 
+                           AuthService.currentUser.savedOpportunities && 
+                           AuthService.currentUser.savedOpportunities.includes(opportunity.id);
+            const isNew = this.isNewOpportunity(opportunity);
+
+            return `
+                <div class="${colClass} mb-4">
+                    <div class="card opportunity-card h-100 ${isHighMatch ? 'opportunity-match-highlight' : ''} 
+                                sector-${opportunity.sector.toLowerCase().replace(/\s+/g, '')}" 
+                         style="position: relative;">
+                        ${isNew ? '<div class="opportunity-new-badge">N</div>' : ''}
+                        
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div class="flex-grow-1">
+                                    <span class="badge badge-sector">${opportunity.sector}</span>
+                                    ${opportunity.isRemote ? '<span class="badge bg-info ms-2">Remote</span>' : ''}
+                                    ${isHighMatch ? '<span class="badge bg-success ms-2">Top Match</span>' : ''}
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    ${AuthService.currentUser && opportunity.matchScore > 0 ? 
+                                        `<span class="match-score">${opportunity.matchScore}%</span>` : ''}
+                                    ${AuthService.currentUser ? `
+                                        <button class="btn btn-sm ${isSaved ? 'btn-danger' : 'btn-outline-danger'}" 
+                                                onclick="toggleSaveOpportunity('${opportunity.id}')" 
+                                                title="${isSaved ? 'Rimuovi dai salvati' : 'Salva opportunità'}">
+                                            <i class="fas fa-heart"></i>
+                                        </button>
+                                    ` : ''}
+                                </div>
+                            </div>
+                            
+                            <h5 class="card-title">${opportunity.title}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                <i class="fas fa-building me-1"></i>${opportunity.companyName}
+                            </h6>
+                            
+                            <div class="opportunity-meta mb-3">
+                                <p class="card-text text-muted mb-2">
+                                    <i class="fas fa-map-marker-alt me-1"></i>${opportunity.location}
+                                    <span class="ms-3">
+                                        <i class="fas fa-briefcase me-1"></i>${this.getJobTypeLabel(opportunity.jobType)}
+                                    </span>
+                                </p>
+                                
+                                ${opportunity.experienceLevel ? `
+                                    <p class="card-text text-muted mb-2">
+                                        <i class="fas fa-chart-line me-1"></i>${this.getExperienceLevelLabel(opportunity.experienceLevel)}
+                                    </p>
+                                ` : ''}
+                            </div>
+                            
+                            <p class="card-text">${this.truncateText(opportunity.description, isListView ? 200 : 100)}</p>
+                            
+                            ${opportunity.requiredSkills && opportunity.requiredSkills.length > 0 ? `
+                                <div class="mb-3">
+                                    <small class="text-muted">Competenze richieste:</small><br>
+                                    <div class="skills-container">
+                                        ${opportunity.requiredSkills.slice(0, isListView ? 5 : 3).map(skill => 
+                                            `<span class="skill-tag">${skill}</span>`
+                                        ).join('')}
+                                        ${opportunity.requiredSkills.length > (isListView ? 5 : 3) ? 
+                                            `<small class="text-muted">+${opportunity.requiredSkills.length - (isListView ? 5 : 3)} altri</small>` : ''}
+                                    </div>
+                                </div>
+                            ` : ''}
+                            
+                            ${opportunity.salaryMin && opportunity.salaryMax ? `
+                                <p class="text-success fw-bold mb-3">
+                                    <i class="fas fa-euro-sign me-1"></i>
+                                    €${opportunity.salaryMin.toLocaleString()} - €${opportunity.salaryMax.toLocaleString()}
+                                </p>
+                            ` : ''}
+
+                            ${opportunity.applicationDeadline ? `
+                                <p class="text-warning small mb-3">
+                                    <i class="fas fa-clock me-1"></i>
+                                    Scadenza: ${new Date(opportunity.applicationDeadline).toLocaleDateString('it-IT')}
+                                </p>
+                            ` : ''}
+                        </div>
+                        
+                        <div class="card-footer bg-transparent">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <button class="btn btn-outline-primary btn-sm" 
+                                        onclick="OpportunityService.viewOpportunity('${opportunity.id}')">
+                                    <i class="fas fa-eye me-1"></i>Dettagli
+                                </button>
+                                
+                                ${AuthService.currentUser ? `
+                                    <button class="btn btn-primary btn-sm" 
+                                            onclick="OpportunityService.applyToOpportunity('${opportunity.id}')">
+                                        <i class="fas fa-paper-plane me-1"></i>Candidati
+                                    </button>
+                                ` : `
+                                    <button class="btn btn-primary btn-sm" onclick="showLogin()">
+                                        <i class="fas fa-sign-in-alt me-1"></i>Accedi
+                                    </button>
+                                `}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        container.innerHTML = `<div class="row">${html}</div>`;
+    }
+
+    showEmptyState() {
+        document.getElementById('loadingOpportunities').style.display = 'none';
+        document.getElementById('opportunitiesContainer').style.display = 'none';
+        
+        const emptyState = document.getElementById('emptyOpportunities');
+        emptyState.style.display = 'block';
+        
+        // Customize empty state based on filters
+        if (this.activeFilters.savedOnly) {
+            document.getElementById('emptyIcon').className = 'fas fa-heart fa-4x text-muted mb-4';
+            document.getElementById('emptyTitle').textContent = 'Nessuna opportunità salvata';
+            document.getElementById('emptyMessage').textContent = 'Non hai ancora salvato nessuna opportunità. Esplora le opportunità disponibili e salva quelle che ti interessano.';
+        } else if (Object.keys(this.activeFilters).length > 0) {
+            document.getElementById('emptyIcon').className = 'fas fa-filter fa-4x text-muted mb-4';
+            document.getElementById('emptyTitle').textContent = 'Nessun risultato per i filtri selezionati';
+            document.getElementById('emptyMessage').textContent = 'Prova a modificare o rimuovere alcuni filtri per vedere più opportunità.';
+        } else {
+            document.getElementById('emptyIcon').className = 'fas fa-briefcase fa-4x text-muted mb-4';
+            document.getElementById('emptyTitle').textContent = 'Nessuna opportunità disponibile';
+            document.getElementById('emptyMessage').textContent = 'Al momento non ci sono opportunità disponibili. Torna più tardi per vedere nuove offerte.';
+        }
+    }
+
+    updateResultsCount(count, subtext) {
+        document.getElementById('resultsCount').textContent = count;
+        document.getElementById('resultsSubtext').textContent = subtext;
+    }
+
+    getResultsSubtext() {
+        if (Object.keys(this.activeFilters).length === 0) {
+            return 'Tutte le opportunità disponibili';
+        } else {
+            return `Filtrate secondo i tuoi criteri di ricerca`;
+        }
+    }
+
+    updateActiveFiltersDisplay() {
+        const activeFiltersCard = document.getElementById('activeFiltersCard');
+        const activeFiltersList = document.getElementById('activeFiltersList');
+        
+        if (Object.keys(this.activeFilters).length === 0) {
+            activeFiltersCard.style.display = 'none';
+            return;
+        }
+
+        const filterLabels = {
+            search: 'Ricerca',
+            type: 'Tipo',
+            sector: 'Settore',
+            location: 'Località',
+            experience: 'Esperienza',
+            jobType: 'Contratto',
+            salaryMin: 'Stipendio Min',
+            salaryMax: 'Stipendio Max',
+            savedOnly: 'Solo Salvate'
+        };
+
+        const filterTags = Object.entries(this.activeFilters).map(([key, value]) => {
+            const label = filterLabels[key] || key;
+            const displayValue = typeof value === 'boolean' ? '' : `: ${value}`;
+            
+            return `
+                <span class="filter-tag">
+                    ${label}${displayValue}
+                    <i class="fas fa-times remove-filter" onclick="removeFilter('${key}')"></i>
+                </span>
+            `;
+        }).join('');
+
+        activeFiltersList.innerHTML = filterTags;
+        activeFiltersCard.style.display = 'block';
+    }
+
+    renderPagination() {
+        const paginationContainer = document.getElementById('opportunitiesPagination');
+        
+        if (this.totalItems <= this.itemsPerPage) {
+            paginationContainer.style.display = 'none';
+            return;
+        }
+
+        const totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
+        let paginationHTML = '';
+
+        // Previous button
+        paginationHTML += `
+            <li class="page-item ${this.currentPage === 1 ? 'disabled' : ''}">
+                <a class="page-link" href="#" onclick="changePage(${this.currentPage - 1})">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            </li>
+        `;
+
+        // Page numbers
+        const startPage = Math.max(1, this.currentPage - 2);
+        const endPage = Math.min(totalPages, this.currentPage + 2);
+
+        if (startPage > 1) {
+            paginationHTML += `<li class="page-item"><a class="page-link" href="#" onclick="changePage(1)">1</a></li>`;
+            if (startPage > 2) {
+                paginationHTML += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+            }
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            paginationHTML += `
+                <li class="page-item ${i === this.currentPage ? 'active' : ''}">
+                    <a class="page-link" href="#" onclick="changePage(${i})">${i}</a>
+                </li>
+            `;
+        }
+
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) {
+                paginationHTML += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+            }
+            paginationHTML += `<li class="page-item"><a class="page-link" href="#" onclick="changePage(${totalPages})">${totalPages}</a></li>`;
+        }
+
+        // Next button
+        paginationHTML += `
+            <li class="page-item ${this.currentPage === totalPages ? 'disabled' : ''}">
+                <a class="page-link" href="#" onclick="changePage(${this.currentPage + 1})">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </li>
+        `;
+
+        paginationContainer.querySelector('.pagination').innerHTML = paginationHTML;
+        paginationContainer.style.display = 'block';
+    }
+
+    // Utility methods
+    getJobTypeLabel(jobType) {
+        const labels = {
+            'full-time': 'Tempo pieno',
+            'part-time': 'Part-time',
+            'contract': 'Contratto',
+            'internship': 'Stage',
+            'training': 'Formazione'
+        };
+        return labels[jobType] || jobType;
+    }
+
+    getExperienceLevelLabel(level) {
+        const labels = {
+            'entry': 'Principiante',
+            'junior': 'Junior',
+            'mid': 'Intermedio',
+            'senior': 'Senior'
+        };
+        return labels[level] || level;
+    }
+
+    truncateText(text, maxLength) {
+        if (!text) return '';
+        if (text.length <= maxLength) return text;
+        return text.substring(0, maxLength) + '...';
+    }
+
+    isNewOpportunity(opportunity) {
+        const createdDate = new Date(opportunity.createdAt);
+        const threeDaysAgo = new Date();
+        threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+        return createdDate > threeDaysAgo;
+    }
+
+    clearAllFilters() {
+        // Reset all form elements
+        document.getElementById('searchOpportunities').value = '';
+        
+        const selects = ['typeFilter', 'sectorFilter', 'locationFilter', 'experienceFilter', 'jobTypeFilter'];
+        selects.forEach(selectId => {
+            document.getElementById(selectId).value = 'all';
+        });
+
+        document.getElementById('salaryMin').value = '';
+        document.getElementById('salaryMax').value = '';
+        document.getElementById('savedOnlyFilter').checked = false;
+
+        this.activeFilters = {};
+        this.currentPage = 1;
+        this.applyFiltersAndSort();
+        this.updateActiveFiltersDisplay();
+    }
+
+    async refreshOpportunities() {
+        await this.loadOpportunities();
+        showToast('Opportunità aggiornate!', 'success');
+    }
+}
+
+// Global functions for template usage
+let opportunityListComponent;
+
+document.addEventListener('DOMContentLoaded', () => {
+    opportunityListComponent = new OpportunityListComponent();
+});
+
+function switchView(view) {
+    opportunityListComponent.currentView = view;
+    
+    // Update button states
+    document.getElementById('gridViewBtn').classList.toggle('active', view === 'grid');
+    document.getElementById('listViewBtn').classList.toggle('active', view === 'list');
+    
+    // Re-render with new view
+    opportunityListComponent.applyFiltersAndSort();
+}
+
+function sortOpportunities(sortBy) {
+    opportunityListComponent.currentSort = sortBy;
+    opportunityListComponent.applyFiltersAndSort();
+}
+
+function changePage(page) {
+    opportunityListComponent.currentPage = page;
+    opportunityListComponent.applyFiltersAndSort();
+    
+    // Scroll to top of opportunities
+    document.getElementById('opportunitiesContainer').scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'start' 
+    });
+}
+
+function removeFilter(filterKey) {
+    delete opportunityListComponent.activeFilters[filterKey];
+    
+    // Reset corresponding form element
+    const elementMappings = {
+        search: 'searchOpportunities',
+        type: 'typeFilter',
+        sector: 'sectorFilter',
+        location: 'locationFilter',
+        experience: 'experienceFilter',
+        jobType: 'jobTypeFilter',
+        savedOnly: 'savedOnlyFilter'
+    };
+
+    const elementId = elementMappings[filterKey];
+    if (elementId) {
+        const element = document.getElementById(elementId);
+        if (element.type === 'checkbox') {
+            element.checked = false;
+        } else if (element.tagName === 'SELECT') {
+            element.value = 'all';
+        } else {
+            element.value = '';
+        }
+    }
+
+    // Handle salary filters
+    if (filterKey === 'salaryMin') {
+        document.getElementById('salaryMin').value = '';
+    } else if (filterKey === 'salaryMax') {
+        document.getElementById('salaryMax').value = '';
+    }
+
+    opportunityListComponent.currentPage = 1;
+    opportunityListComponent.applyFiltersAndSort();
+    opportunityListComponent.updateActiveFiltersDisplay();
+}
+
+function clearAllFilters() {
+    opportunityListComponent.clearAllFilters();
+}
+
+async function toggleSaveOpportunity(opportunityId) {
+    if (!AuthService.currentUser) {
+        showToast('Devi essere autenticato per salvare opportunità', 'warning');
+        return;
+    }
+
+    try {
+        const savedOpportunities = AuthService.currentUser.savedOpportunities || [];
+        const isSaved = savedOpportunities.includes(opportunityId);
+
+        let success;
+        if (isSaved) {
+            success = await AuthService.removeSavedOpportunity(opportunityId);
+            if (success) {
+                showToast('Opportunità rimossa dai salvati', 'info');
+            }
+        } else {
+            success = await AuthService.saveOpportunity(opportunityId);
+            if (success) {
+                showToast('Opportunità salvata!', 'success');
+            }
+        }
+
+        if (success) {
+            // Re-render opportunities to update save button states
+            opportunityListComponent.applyFiltersAndSort();
+        }
+
+    } catch (error) {
+        console.error('Error toggling save state:', error);
+        showToast('Errore durante l\'operazione', 'error');
+    }
+}
+</script>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Guidance - AI-Powered Career Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-gradient-primary fixed-top" id="mainNavbar">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="fas fa-compass me-2"></i>
+                Career Guidance
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item" id="loginNav">
+                        <a class="nav-link" href="#" onclick="showLogin()">
+                            <i class="fas fa-sign-in-alt me-1"></i>Login
+                        </a>
+                    </li>
+                    <li class="nav-item" id="userNav" style="display: none;">
+                        <div class="dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user me-1"></i>
+                                <span id="userNameNav">Utente</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" onclick="showDashboard()">
+                                    <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                                </a></li>
+                                <li><a class="dropdown-item" href="#" onclick="showProfile()">
+                                    <i class="fas fa-user-edit me-2"></i>Profilo
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#" onclick="logout()">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Caricamento...</span>
+            </div>
+        </div>
+
+        <!-- Welcome Section -->
+        <section id="welcomeSection" class="hero-section">
+            <div class="container">
+                <div class="row align-items-center min-vh-100">
+                    <div class="col-lg-6">
+                        <h1 class="display-4 fw-bold mb-4">
+                            Scopri il tuo <span class="text-gradient">futuro professionale</span>
+                        </h1>
+                        <p class="lead mb-4">
+                            Piattaforma AI-powered per l'orientamento professionale e il matching con opportunità lavorative personalizzate.
+                        </p>
+                        <div class="d-flex flex-column flex-sm-row gap-3">
+                            <button class="btn btn-primary btn-lg" onclick="startCareerJourney()">
+                                <i class="fas fa-rocket me-2"></i>
+                                Scrivi il tuo futuro
+                            </button>
+                            <button class="btn btn-outline-primary btn-lg" onclick="showLogin()">
+                                <i class="fas fa-sign-in-alt me-2"></i>
+                                Accedi
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="feature-cards">
+                            <div class="feature-card">
+                                <i class="fas fa-brain text-primary"></i>
+                                <h5>Analisi AI</h5>
+                                <p>Algoritmi avanzati per analizzare il tuo profilo professionale</p>
+                            </div>
+                            <div class="feature-card">
+                                <i class="fas fa-target text-success"></i>
+                                <h5>Matching Intelligente</h5>
+                                <p>Trova opportunità perfettamente allineate con le tue competenze</p>
+                            </div>
+                            <div class="feature-card">
+                                <i class="fas fa-chart-line text-warning"></i>
+                                <h5>Crescita Professionale</h5>
+                                <p>Percorsi personalizzati per lo sviluppo della tua carriera</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Content Container -->
+        <div id="dynamicContent" style="display: none;">
+            <!-- Content will be loaded here dynamically -->
+        </div>
+    </main>
+
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="mainToast" class="toast" role="alert">
+            <div class="toast-header">
+                <i class="fas fa-info-circle text-primary me-2"></i>
+                <strong class="me-auto">Career Guidance</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body" id="toastMessage">
+                <!-- Toast message will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Test Control Panel (Development Only) -->
+    <div id="testPanelContainer"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/mock-ai-service.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/profile.js"></script>
+    <script src="js/opportunities.js"></script>
+    <script src="js/ai-analysis.js"></script>
+    <script src="js/app.js"></script>
+    
+    <script>
+        // Load test panel if in development mode
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if we should show test panel (no real API keys or test mode)
+            const shouldShowTestPanel = !window.DATABASE_URL || 
+                                      !window.OPENAI_API_KEY ||
+                                      window.location.hostname === 'localhost' ||
+                                      window.location.hostname.includes('replit');
+            
+            if (shouldShowTestPanel) {
+                fetch('components/test-panel.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById('testPanelContainer').innerHTML = html;
+                    })
+                    .catch(error => console.log('Test panel not loaded:', error.message));
+            }
+        });
+    </script>
+</body>
+</html>

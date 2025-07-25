@@ -1,0 +1,702 @@
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Header -->
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <h2 class="card-title text-primary mb-3">
+                        <i class="fas fa-rocket me-2"></i>
+                        Inizia il tuo Percorso Professionale
+                    </h2>
+                    <p class="lead mb-4">
+                        Carica il tuo CV per ricevere un'analisi AI personalizzata e scoprire le opportunità perfette per te
+                    </p>
+                    <div class="progress mb-3" style="height: 8px;">
+                        <div class="progress-bar" role="progressbar" style="width: 33%" id="uploadProgress">
+                            <span class="visually-hidden">Passo 1 di 3</span>
+                        </div>
+                    </div>
+                    <div class="step-indicators">
+                        <span class="step-indicator active">1. Carica CV</span>
+                        <span class="step-indicator">2. Registrazione</span>
+                        <span class="step-indicator">3. Dashboard</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CV Upload Card -->
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-5">
+                    <!-- Upload Area -->
+                    <div class="cv-upload-zone" id="cvUploadZone">
+                        <div class="upload-content" id="uploadContent">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt fa-4x text-primary mb-4"></i>
+                            </div>
+                            <h4 class="upload-title mb-3">Carica il tuo Curriculum Vitae</h4>
+                            <p class="upload-subtitle text-muted mb-4">
+                                Trascina qui il tuo file o clicca per selezionarlo dal computer
+                            </p>
+                            <div class="upload-formats mb-4">
+                                <span class="badge bg-light text-dark me-2">
+                                    <i class="fas fa-file-pdf me-1"></i>PDF
+                                </span>
+                                <span class="badge bg-light text-dark me-2">
+                                    <i class="fas fa-file-word me-1"></i>DOC
+                                </span>
+                                <span class="badge bg-light text-dark">
+                                    <i class="fas fa-file-word me-1"></i>DOCX
+                                </span>
+                            </div>
+                            <button class="btn btn-primary btn-lg" id="selectFileBtn">
+                                <i class="fas fa-folder-open me-2"></i>
+                                Seleziona File
+                            </button>
+                            <p class="small text-muted mt-3 mb-0">
+                                <i class="fas fa-shield-alt me-1"></i>
+                                I tuoi dati sono protetti e trattati in modo sicuro
+                            </p>
+                        </div>
+
+                        <!-- Upload Progress -->
+                        <div class="upload-progress" id="uploadProgressContent" style="display: none;">
+                            <div class="text-center">
+                                <div class="spinner-border text-primary mb-3" role="status">
+                                    <span class="visually-hidden">Caricamento...</span>
+                                </div>
+                                <h5 class="mb-2">Caricamento in corso...</h5>
+                                <p class="text-muted mb-3" id="uploadStatusText">Preparazione del file</p>
+                                <div class="progress mb-3" style="height: 10px;">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                         role="progressbar" style="width: 0%" id="fileUploadProgress"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Upload Success -->
+                        <div class="upload-success" id="uploadSuccessContent" style="display: none;">
+                            <div class="text-center">
+                                <div class="success-icon mb-4">
+                                    <i class="fas fa-check-circle fa-4x text-success"></i>
+                                </div>
+                                <h4 class="text-success mb-3">CV Caricato con Successo!</h4>
+                                <div class="uploaded-file-info" id="uploadedFileInfo">
+                                    <!-- File info will be populated here -->
+                                </div>
+                                <div class="mt-4">
+                                    <p class="text-muted mb-3">
+                                        Ora puoi procedere con la registrazione per accedere all'analisi AI
+                                    </p>
+                                    <div class="d-flex justify-content-center gap-3">
+                                        <button class="btn btn-outline-secondary" id="uploadAnotherBtn">
+                                            <i class="fas fa-upload me-2"></i>
+                                            Carica Altro File
+                                        </button>
+                                        <button class="btn btn-success btn-lg" id="proceedToRegisterBtn">
+                                            <i class="fas fa-user-plus me-2"></i>
+                                            Procedi alla Registrazione
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Upload Error -->
+                        <div class="upload-error" id="uploadErrorContent" style="display: none;">
+                            <div class="text-center">
+                                <div class="error-icon mb-4">
+                                    <i class="fas fa-exclamation-triangle fa-4x text-danger"></i>
+                                </div>
+                                <h4 class="text-danger mb-3">Errore durante il caricamento</h4>
+                                <p class="text-muted mb-4" id="errorMessage">
+                                    Si è verificato un errore durante il caricamento del file.
+                                </p>
+                                <button class="btn btn-primary" id="retryUploadBtn">
+                                    <i class="fas fa-redo me-2"></i>
+                                    Riprova
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Hidden file input -->
+                        <input type="file" id="cvFileInput" accept=".pdf,.doc,.docx" style="display: none;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Benefits Section -->
+            <div class="row mt-5">
+                <div class="col-md-4 mb-4">
+                    <div class="benefit-card text-center">
+                        <div class="benefit-icon">
+                            <i class="fas fa-brain text-primary"></i>
+                        </div>
+                        <h6>Analisi AI Avanzata</h6>
+                        <p class="small text-muted">
+                            Il nostro algoritmo analizza il tuo CV per identificare il settore più adatto
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="benefit-card text-center">
+                        <div class="benefit-icon">
+                            <i class="fas fa-target text-success"></i>
+                        </div>
+                        <h6>Matching Intelligente</h6>
+                        <p class="small text-muted">
+                            Trova opportunità personalizzate basate sulle tue competenze ed esperienza
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="benefit-card text-center">
+                        <div class="benefit-icon">
+                            <i class="fas fa-chart-line text-warning"></i>
+                        </div>
+                        <h6>Crescita Professionale</h6>
+                        <p class="small text-muted">
+                            Ricevi consigli personalizzati per sviluppare la tua carriera
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Already have account -->
+            <div class="text-center mt-4">
+                <p class="text-muted">
+                    Hai già un account?
+                    <a href="#" class="text-decoration-none fw-bold" onclick="showLogin()">
+                        <i class="fas fa-sign-in-alt me-1"></i>
+                        Accedi qui
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.step-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.step-indicator {
+    font-size: 0.9rem;
+    color: #6c757d;
+    position: relative;
+}
+
+.step-indicator.active {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.cv-upload-zone {
+    border: 3px dashed #dee2e6;
+    border-radius: 16px;
+    padding: 4rem 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.02) 0%, rgba(118, 75, 162, 0.02) 100%);
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cv-upload-zone:hover {
+    border-color: var(--primary-color);
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+    transform: translateY(-2px);
+}
+
+.cv-upload-zone.dragover {
+    border-color: var(--success-color);
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(139, 195, 74, 0.1) 100%);
+    transform: scale(1.02);
+}
+
+.cv-upload-zone.uploading {
+    border-color: var(--info-color);
+    background: linear-gradient(135deg, rgba(33, 150, 243, 0.05) 0%, rgba(3, 169, 244, 0.05) 100%);
+    cursor: not-allowed;
+}
+
+.cv-upload-zone.success {
+    border-color: var(--success-color);
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(139, 195, 74, 0.1) 100%);
+}
+
+.cv-upload-zone.error {
+    border-color: var(--error-color);
+    background: linear-gradient(135deg, rgba(244, 67, 54, 0.1) 0%, rgba(255, 82, 82, 0.1) 100%);
+}
+
+.upload-formats .badge {
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+}
+
+.benefit-card {
+    padding: 2rem 1rem;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.benefit-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.benefit-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(102, 126, 234, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+}
+
+.benefit-icon i {
+    font-size: 1.5rem;
+}
+
+.uploaded-file-info {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-left: 4px solid var(--success-color);
+}
+
+.file-details {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    text-align: left;
+}
+
+.file-icon {
+    font-size: 2rem;
+    color: var(--success-color);
+}
+
+.file-info h6 {
+    margin-bottom: 0.25rem;
+    color: var(--dark-color);
+}
+
+.file-info small {
+    color: #6c757d;
+}
+
+@media (max-width: 768px) {
+    .cv-upload-zone {
+        padding: 2rem 1rem;
+        min-height: 300px;
+    }
+    
+    .step-indicators {
+        gap: 1rem;
+    }
+    
+    .step-indicator {
+        font-size: 0.8rem;
+    }
+    
+    .benefit-card {
+        padding: 1.5rem 1rem;
+    }
+}
+
+@keyframes uploadSuccess {
+    0% { transform: scale(0.8); opacity: 0; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.upload-success {
+    animation: uploadSuccess 0.6s ease-out;
+}
+</style>
+
+<script>
+// CV Upload component functionality
+class CVUploadComponent {
+    constructor() {
+        this.uploadedFile = null;
+        this.uploadedFileData = null;
+        this.init();
+    }
+
+    init() {
+        this.setupEventListeners();
+        this.setupDragAndDrop();
+    }
+
+    setupEventListeners() {
+        // File input change
+        const fileInput = document.getElementById('cvFileInput');
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                this.handleFileSelection(e.target.files[0]);
+            }
+        });
+
+        // Select file button
+        const selectFileBtn = document.getElementById('selectFileBtn');
+        selectFileBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Upload zone click
+        const uploadZone = document.getElementById('cvUploadZone');
+        uploadZone.addEventListener('click', (e) => {
+            if (e.target.closest('#uploadContent')) {
+                fileInput.click();
+            }
+        });
+
+        // Retry button
+        const retryBtn = document.getElementById('retryUploadBtn');
+        retryBtn.addEventListener('click', () => {
+            this.resetUpload();
+        });
+
+        // Upload another button
+        const uploadAnotherBtn = document.getElementById('uploadAnotherBtn');
+        uploadAnotherBtn.addEventListener('click', () => {
+            this.resetUpload();
+        });
+
+        // Proceed to register button
+        const proceedBtn = document.getElementById('proceedToRegisterBtn');
+        proceedBtn.addEventListener('click', () => {
+            this.proceedToRegistration();
+        });
+    }
+
+    setupDragAndDrop() {
+        const uploadZone = document.getElementById('cvUploadZone');
+
+        // Prevent default drag behaviors
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadZone.addEventListener(eventName, this.preventDefaults, false);
+            document.body.addEventListener(eventName, this.preventDefaults, false);
+        });
+
+        // Highlight drop zone when item is dragged over it
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadZone.addEventListener(eventName, () => {
+                uploadZone.classList.add('dragover');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadZone.addEventListener(eventName, () => {
+                uploadZone.classList.remove('dragover');
+            }, false);
+        });
+
+        // Handle dropped files
+        uploadZone.addEventListener('drop', (e) => {
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                this.handleFileSelection(files[0]);
+            }
+        }, false);
+    }
+
+    preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    async handleFileSelection(file) {
+        try {
+            // Validate file
+            if (!this.validateFile(file)) {
+                return;
+            }
+
+            this.uploadedFile = file;
+            await this.uploadFile(file);
+
+        } catch (error) {
+            console.error('Error handling file selection:', error);
+            this.showError('Errore durante la selezione del file');
+        }
+    }
+
+    validateFile(file) {
+        // Check file type
+        const validTypes = [
+            'application/pdf',
+            'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        ];
+
+        if (!validTypes.includes(file.type)) {
+            this.showError('Formato file non supportato. Utilizzare PDF, DOC o DOCX.');
+            return false;
+        }
+
+        // Check file size (10MB limit)
+        const maxSize = 10 * 1024 * 1024;
+        if (file.size > maxSize) {
+            this.showError('Il file è troppo grande. Dimensione massima: 10MB.');
+            return false;
+        }
+
+        return true;
+    }
+
+    async uploadFile(file) {
+        try {
+            this.showUploadProgress();
+
+            // Generate unique filename
+            const timestamp = Date.now();
+            const fileName = `temp_upload_${timestamp}_${file.name}`;
+            const filePath = `temp/${fileName}`;
+
+            // Update progress
+            this.updateUploadProgress(25, 'Preparazione upload...');
+
+            // Upload to Supabase Storage
+            const { data, error } = await supabaseClient.storage
+                .from('cvs')
+                .upload(filePath, file, {
+                    cacheControl: '3600',
+                    upsert: true
+                });
+
+            if (error) {
+                console.error('Upload error:', error);
+                throw new Error('Errore durante l\'upload del file');
+            }
+
+            this.updateUploadProgress(75, 'Finalizzazione...');
+
+            // Get public URL
+            const { data: { publicUrl } } = supabaseClient.storage
+                .from('cvs')
+                .getPublicUrl(filePath);
+
+            this.updateUploadProgress(100, 'Upload completato!');
+
+            // Store upload data
+            this.uploadedFileData = {
+                fileName: file.name,
+                filePath: filePath,
+                publicUrl: publicUrl,
+                size: file.size,
+                uploadedAt: new Date().toISOString()
+            };
+
+            // Store in session for registration process
+            sessionStorage.setItem('uploadedCV', JSON.stringify(this.uploadedFileData));
+
+            // Show success after a short delay
+            setTimeout(() => {
+                this.showSuccess();
+            }, 500);
+
+        } catch (error) {
+            console.error('Upload error:', error);
+            this.showError(error.message || 'Errore durante il caricamento del file');
+        }
+    }
+
+    updateUploadProgress(percentage, statusText) {
+        const progressBar = document.getElementById('fileUploadProgress');
+        const statusElement = document.getElementById('uploadStatusText');
+        
+        if (progressBar) {
+            progressBar.style.width = `${percentage}%`;
+        }
+        
+        if (statusElement) {
+            statusElement.textContent = statusText;
+        }
+    }
+
+    showUploadProgress() {
+        const uploadZone = document.getElementById('cvUploadZone');
+        uploadZone.classList.add('uploading');
+
+        // Hide all content sections
+        this.hideAllContent();
+
+        // Show progress content
+        const progressContent = document.getElementById('uploadProgressContent');
+        progressContent.style.display = 'block';
+
+        // Update main progress bar
+        const mainProgressBar = document.getElementById('uploadProgress');
+        mainProgressBar.style.width = '66%';
+    }
+
+    showSuccess() {
+        const uploadZone = document.getElementById('cvUploadZone');
+        uploadZone.classList.remove('uploading');
+        uploadZone.classList.add('success');
+
+        // Hide all content sections
+        this.hideAllContent();
+
+        // Show success content
+        const successContent = document.getElementById('uploadSuccessContent');
+        successContent.style.display = 'block';
+
+        // Populate file info
+        this.populateFileInfo();
+
+        // Update main progress bar
+        const mainProgressBar = document.getElementById('uploadProgress');
+        mainProgressBar.style.width = '100%';
+
+        // Show success toast
+        showToast('CV caricato con successo!', 'success');
+    }
+
+    showError(message) {
+        const uploadZone = document.getElementById('cvUploadZone');
+        uploadZone.classList.remove('uploading');
+        uploadZone.classList.add('error');
+
+        // Hide all content sections
+        this.hideAllContent();
+
+        // Show error content
+        const errorContent = document.getElementById('uploadErrorContent');
+        errorContent.style.display = 'block';
+
+        // Set error message
+        const errorMessage = document.getElementById('errorMessage');
+        errorMessage.textContent = message;
+
+        // Show error toast
+        showToast(message, 'error');
+    }
+
+    hideAllContent() {
+        const contentSections = [
+            'uploadContent',
+            'uploadProgressContent',
+            'uploadSuccessContent',
+            'uploadErrorContent'
+        ];
+
+        contentSections.forEach(sectionId => {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.style.display = 'none';
+            }
+        });
+    }
+
+    populateFileInfo() {
+        const fileInfoContainer = document.getElementById('uploadedFileInfo');
+        if (!fileInfoContainer || !this.uploadedFile) return;
+
+        const fileSize = this.formatFileSize(this.uploadedFile.size);
+        const fileIcon = this.getFileIcon(this.uploadedFile.name);
+
+        fileInfoContainer.innerHTML = `
+            <div class="file-details">
+                <div class="file-icon">
+                    <i class="${fileIcon}"></i>
+                </div>
+                <div class="file-info">
+                    <h6>${this.uploadedFile.name}</h6>
+                    <small>Dimensione: ${fileSize} | Caricato: ${new Date().toLocaleString('it-IT')}</small>
+                </div>
+            </div>
+        `;
+    }
+
+    formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    getFileIcon(fileName) {
+        const extension = fileName.split('.').pop().toLowerCase();
+        switch (extension) {
+            case 'pdf':
+                return 'fas fa-file-pdf text-danger';
+            case 'doc':
+            case 'docx':
+                return 'fas fa-file-word text-primary';
+            default:
+                return 'fas fa-file text-secondary';
+        }
+    }
+
+    resetUpload() {
+        const uploadZone = document.getElementById('cvUploadZone');
+        uploadZone.classList.remove('uploading', 'success', 'error');
+
+        // Hide all content sections
+        this.hideAllContent();
+
+        // Show initial content
+        const uploadContent = document.getElementById('uploadContent');
+        uploadContent.style.display = 'block';
+
+        // Reset file input
+        const fileInput = document.getElementById('cvFileInput');
+        fileInput.value = '';
+
+        // Reset data
+        this.uploadedFile = null;
+        this.uploadedFileData = null;
+
+        // Reset main progress bar
+        const mainProgressBar = document.getElementById('uploadProgress');
+        mainProgressBar.style.width = '33%';
+
+        // Clear session storage
+        sessionStorage.removeItem('uploadedCV');
+    }
+
+    async proceedToRegistration() {
+        try {
+            // Ensure we have uploaded file data
+            if (!this.uploadedFileData) {
+                showToast('Errore: dati del CV non trovati', 'error');
+                return;
+            }
+
+            // Store CV data for registration process
+            sessionStorage.setItem('cvDataForRegistration', JSON.stringify(this.uploadedFileData));
+
+            // Navigate to registration
+            await app.showRegister();
+
+        } catch (error) {
+            console.error('Error proceeding to registration:', error);
+            showToast('Errore durante la navigazione', 'error');
+        }
+    }
+}
+
+// Initialize CV Upload component when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    new CVUploadComponent();
+});
+</script>

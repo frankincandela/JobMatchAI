@@ -1,0 +1,398 @@
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Welcome Section -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h4 class="card-title mb-2">
+                                <i class="fas fa-home me-2 text-primary"></i>
+                                Benvenuto nella tua Dashboard
+                            </h4>
+                            <p class="text-muted mb-0">
+                                Gestisci il tuo profilo professionale e scopri nuove opportunità di carriera
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <button class="btn btn-primary" onclick="showProfile()">
+                                <i class="fas fa-user-edit me-2"></i>
+                                Completa Profilo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Completeness -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-line me-2"></i>
+                        Completamento Profilo
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>Progresso del tuo profilo professionale</span>
+                        <span class="fw-bold text-primary" id="profilePercentage">0%</span>
+                    </div>
+                    <div class="progress mb-3" style="height: 10px;">
+                        <div class="progress-bar" role="progressbar" style="width: 0%" id="profileProgressBar">0%</div>
+                    </div>
+                    <div class="row text-center">
+                        <div class="col-md-3">
+                            <div class="profile-step" id="stepBiography">
+                                <i class="fas fa-user-circle fa-2x mb-2 text-muted"></i>
+                                <small class="d-block">Biografia</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="profile-step" id="stepExperience">
+                                <i class="fas fa-briefcase fa-2x mb-2 text-muted"></i>
+                                <small class="d-block">Esperienza</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="profile-step" id="stepEducation">
+                                <i class="fas fa-graduation-cap fa-2x mb-2 text-muted"></i>
+                                <small class="d-block">Formazione</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="profile-step" id="stepCV">
+                                <i class="fas fa-file-pdf fa-2x mb-2 text-muted"></i>
+                                <small class="d-block">CV</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Analysis Results -->
+            <div class="card mb-4" id="aiAnalysisCard" style="display: none;">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-brain me-2"></i>
+                        Analisi AI del tuo Profilo
+                    </h5>
+                </div>
+                <div class="card-body" id="aiAnalysisContent">
+                    <!-- AI analysis results will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Recent Opportunities -->
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-briefcase me-2"></i>
+                        Opportunità Consigliate per Te
+                    </h5>
+                    <button class="btn btn-outline-primary btn-sm" onclick="showOpportunities()">
+                        <i class="fas fa-eye me-1"></i>
+                        Vedi Tutte
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div id="recentOpportunities">
+                        <div class="d-flex justify-content-center py-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Caricamento opportunità...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <!-- Quick Stats -->
+            <div class="row mb-4">
+                <div class="col-6">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-search fa-2x text-primary mb-2"></i>
+                            <h4 class="card-title mb-1" id="opportunitiesCount">0</h4>
+                            <small class="text-muted">Opportunità Trovate</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-heart fa-2x text-success mb-2"></i>
+                            <h4 class="card-title mb-1" id="savedOpportunitiesCount">0</h4>
+                            <small class="text-muted">Opportunità Salvate</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-bolt me-2"></i>
+                        Azioni Rapide
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" onclick="showProfile()">
+                            <i class="fas fa-user-edit me-2"></i>
+                            Modifica Profilo
+                        </button>
+                        <button class="btn btn-outline-primary" onclick="showOpportunities()">
+                            <i class="fas fa-search me-2"></i>
+                            Cerca Opportunità
+                        </button>
+                        <button class="btn btn-outline-success" onclick="showSavedOpportunities()">
+                            <i class="fas fa-heart me-2"></i>
+                            Opportunità Salvate
+                        </button>
+                        <button class="btn btn-outline-info" onclick="downloadProfile()">
+                            <i class="fas fa-download me-2"></i>
+                            Scarica CV
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Summary -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user me-2"></i>
+                        Il Tuo Profilo
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="profile-summary" id="profileSummary">
+                        <div class="text-center py-3">
+                            <i class="fas fa-user-circle fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">Completa il tuo profilo per vedere un riepilogo personalizzato</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tips & Guidance -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-lightbulb me-2"></i>
+                        Consigli per il Successo
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="tips-carousel" id="tipsCarousel">
+                        <div class="tip-item active">
+                            <div class="tip-icon">
+                                <i class="fas fa-star text-warning"></i>
+                            </div>
+                            <div class="tip-content">
+                                <h6>Completa il tuo profilo</h6>
+                                <p class="small text-muted">Un profilo completo aumenta le tue possibilità di matching del 80%</p>
+                            </div>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-icon">
+                                <i class="fas fa-brain text-info"></i>
+                            </div>
+                            <div class="tip-content">
+                                <h6>Usa l'analisi AI</h6>
+                                <p class="small text-muted">L'intelligenza artificiale può identificare il settore più adatto a te</p>
+                            </div>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-icon">
+                                <i class="fas fa-network-wired text-success"></i>
+                            </div>
+                            <div class="tip-content">
+                                <h6>Aggiorna regolarmente</h6>
+                                <p class="small text-muted">Mantieni il tuo profilo aggiornato per ricevere opportunità migliori</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-3">
+                        <div class="tip-indicators">
+                            <button class="tip-indicator active" onclick="showTip(0)"></button>
+                            <button class="tip-indicator" onclick="showTip(1)"></button>
+                            <button class="tip-indicator" onclick="showTip(2)"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.profile-step {
+    padding: 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.profile-step.completed i {
+    color: var(--success-color) !important;
+}
+
+.profile-step.completed {
+    background-color: rgba(76, 175, 80, 0.1);
+}
+
+.tips-carousel {
+    position: relative;
+    min-height: 100px;
+}
+
+.tip-item {
+    display: none;
+    align-items: center;
+    gap: 1rem;
+}
+
+.tip-item.active {
+    display: flex;
+}
+
+.tip-icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(102, 126, 234, 0.1);
+    border-radius: 50%;
+}
+
+.tip-content {
+    flex: 1;
+}
+
+.tip-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.tip-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: none;
+    background: #dee2e6;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.tip-indicator.active {
+    background: var(--primary-color);
+}
+
+.profile-summary .summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.profile-summary .summary-item:last-child {
+    border-bottom: none;
+}
+
+@media (max-width: 768px) {
+    .tip-item {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .tip-icon {
+        margin-bottom: 0.5rem;
+    }
+}
+</style>
+
+<script>
+// Dashboard specific functionality
+let currentTip = 0;
+const tips = document.querySelectorAll('.tip-item');
+const indicators = document.querySelectorAll('.tip-indicator');
+
+function showTip(index) {
+    // Hide all tips
+    tips.forEach(tip => tip.classList.remove('active'));
+    indicators.forEach(indicator => indicator.classList.remove('active'));
+    
+    // Show selected tip
+    if (tips[index]) {
+        tips[index].classList.add('active');
+        indicators[index].classList.add('active');
+        currentTip = index;
+    }
+}
+
+// Auto-rotate tips
+setInterval(() => {
+    currentTip = (currentTip + 1) % tips.length;
+    showTip(currentTip);
+}, 5000);
+
+// Dashboard functions
+async function showSavedOpportunities() {
+    // Filter opportunities to show only saved ones
+    await app.loadView('opportunities-list');
+    // Set filter to saved after loading
+    setTimeout(() => {
+        const savedFilter = document.getElementById('savedOnlyFilter');
+        if (savedFilter) {
+            savedFilter.checked = true;
+            savedFilter.dispatchEvent(new Event('change'));
+        }
+    }, 500);
+}
+
+async function downloadProfile() {
+    try {
+        if (!AuthService.currentUser) {
+            showToast('Devi essere autenticato per scaricare il profilo', 'warning');
+            return;
+        }
+
+        const profile = await ProfileService.getUserProfile(AuthService.currentUser.id);
+        if (!profile || !profile.cvFilePath) {
+            showToast('Nessun CV trovato. Carica prima il tuo CV nel profilo.', 'warning');
+            return;
+        }
+
+        // Generate download URL
+        const { data, error } = await supabaseClient.storage
+            .from('cvs')
+            .download(profile.cvFilePath);
+
+        if (error) {
+            throw error;
+        }
+
+        // Create download link
+        const url = URL.createObjectURL(data);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = profile.cvFilePath.split('/').pop();
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        showToast('CV scaricato con successo!', 'success');
+
+    } catch (error) {
+        console.error('Error downloading profile:', error);
+        showToast('Errore durante il download del CV', 'error');
+    }
+}
+</script>

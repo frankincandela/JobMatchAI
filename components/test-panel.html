@@ -1,0 +1,418 @@
+<!-- Test Control Panel Component -->
+<div class="test-control-panel" id="testControlPanel">
+    <div class="card border-warning">
+        <div class="card-header bg-warning text-dark">
+            <div class="d-flex justify-content-between align-items-center">
+                <h6 class="mb-0">
+                    <i class="fas fa-flask me-2"></i>
+                    Pannello Test AI (Modalità Sviluppo)
+                </h6>
+                <button class="btn btn-sm btn-outline-dark" onclick="toggleTestPanel()">
+                    <i class="fas fa-minus" id="testPanelToggleIcon"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body" id="testPanelContent">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="alert alert-info mb-3">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Modalità Test Attiva:</strong> Tutte le funzionalità AI utilizzano dati simulati 
+                        per permetterti di testare l'app senza costi OpenAI. Perfetto per lo sviluppo e i test!
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-success">
+                                <div class="card-body">
+                                    <h6 class="text-success mb-2">
+                                        <i class="fas fa-check-circle me-2"></i>
+                                        Servizi Mock Attivi
+                                    </h6>
+                                    <ul class="list-unstyled mb-0 small">
+                                        <li><i class="fas fa-brain text-success me-2"></i>Analisi profilo AI</li>
+                                        <li><i class="fas fa-file-pdf text-success me-2"></i>Analisi CV</li>
+                                        <li><i class="fas fa-briefcase text-success me-2"></i>Matching opportunità</li>
+                                        <li><i class="fas fa-heart text-success me-2"></i>Generazione lettere motivazionali</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                    <h6 class="text-info mb-2">
+                                        <i class="fas fa-database me-2"></i>
+                                        Dati Test Inclusi
+                                    </h6>
+                                    <ul class="list-unstyled mb-0 small">
+                                        <li><i class="fas fa-industry text-info me-2"></i>5 settori supportati</li>
+                                        <li><i class="fas fa-building text-info me-2"></i>10+ opportunità simulate</li>
+                                        <li><i class="fas fa-chart-line text-info me-2"></i>Punteggi match realistici</li>
+                                        <li><i class="fas fa-clock text-info me-2"></i>Tempi risposta simulati</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="mb-0">Controlli Test</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label small">Modalità AI</label>
+                                <div class="btn-group w-100" role="group">
+                                    <button type="button" class="btn btn-outline-warning active" 
+                                            id="mockModeBtn" onclick="setAIMode('mock')">
+                                        <i class="fas fa-flask me-1"></i>
+                                        Test
+                                    </button>
+                                    <button type="button" class="btn btn-outline-primary" 
+                                            id="liveModeBtn" onclick="setAIMode('live')">
+                                        <i class="fas fa-cloud me-1"></i>
+                                        Live
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="mockDelay" class="form-label small">Ritardo Simulato (ms)</label>
+                                <input type="range" class="form-range" id="mockDelay" 
+                                       min="500" max="5000" value="1500" step="250"
+                                       onchange="updateMockDelay(this.value)">
+                                <div class="d-flex justify-content-between small text-muted">
+                                    <span>500ms</span>
+                                    <span id="currentDelay">1500ms</span>
+                                    <span>5000ms</span>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <button class="btn btn-sm btn-outline-secondary w-100" 
+                                        onclick="regenerateTestData()">
+                                    <i class="fas fa-sync-alt me-2"></i>
+                                    Rigenera Dati Test
+                                </button>
+                            </div>
+                            
+                            <div class="text-center">
+                                <button class="btn btn-sm btn-outline-danger" 
+                                        onclick="clearTestData()">
+                                    <i class="fas fa-trash me-2"></i>
+                                    Pulisci Cache Test
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Test Statistics -->
+            <div class="row mt-3">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="mb-0">
+                                <i class="fas fa-chart-bar me-2"></i>
+                                Statistiche Test Sessione
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row text-center">
+                                <div class="col-md-3">
+                                    <div class="border-end">
+                                        <h4 class="text-primary mb-1" id="mockCallsCount">0</h4>
+                                        <small class="text-muted">Chiamate AI Mock</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="border-end">
+                                        <h4 class="text-success mb-1" id="savedCostsEuro">€0.00</h4>
+                                        <small class="text-muted">Costi Risparmiati</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="border-end">
+                                        <h4 class="text-warning mb-1" id="testOpportunitiesViewed">0</h4>
+                                        <small class="text-muted">Opportunità Testate</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <h4 class="text-info mb-1" id="testProfilesAnalyzed">0</h4>
+                                    <small class="text-muted">Profili Analizzati</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.test-control-panel {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 600px;
+    max-width: 90vw;
+    z-index: 1050;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.test-control-panel.collapsed #testPanelContent {
+    display: none;
+}
+
+.test-control-panel .card {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-width: 2px;
+}
+
+.test-control-panel .btn-group .btn.active {
+    background-color: var(--warning-color);
+    border-color: var(--warning-color);
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .test-control-panel {
+        position: relative;
+        top: auto;
+        right: auto;
+        width: 100%;
+        margin: 20px 0;
+    }
+}
+
+.test-panel-mini {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1050;
+}
+
+.test-panel-mini .badge {
+    font-size: 0.8rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+
+.test-panel-mini .badge:hover {
+    transform: scale(1.05);
+}
+</style>
+
+<script>
+// Test Control Panel JavaScript
+class TestControlPanel {
+    constructor() {
+        this.isCollapsed = false;
+        this.stats = {
+            mockCalls: 0,
+            savedCosts: 0,
+            opportunitiesViewed: 0,
+            profilesAnalyzed: 0
+        };
+        this.init();
+    }
+
+    init() {
+        // Load saved stats
+        const savedStats = localStorage.getItem('testControlStats');
+        if (savedStats) {
+            this.stats = { ...this.stats, ...JSON.parse(savedStats) };
+            this.updateStatsDisplay();
+        }
+
+        // Set initial delay
+        if (window.mockAIService) {
+            window.mockAIService.delay = 1500;
+        }
+
+        // Show panel in development/test mode
+        this.checkIfShouldShow();
+    }
+
+    checkIfShouldShow() {
+        // Show panel if we're in test mode or no API keys configured
+        const isTestMode = window.mockAIService && window.mockAIService.isEnabled;
+        const hasAPIKey = window.AIAnalysisService && 
+                         window.AIAnalysisService.apiKey && 
+                         window.AIAnalysisService.apiKey !== 'your-openai-api-key-here';
+        
+        if (isTestMode || !hasAPIKey) {
+            this.show();
+        } else {
+            this.hide();
+        }
+    }
+
+    show() {
+        const panel = document.getElementById('testControlPanel');
+        if (panel) {
+            panel.style.display = 'block';
+        }
+    }
+
+    hide() {
+        const panel = document.getElementById('testControlPanel');
+        if (panel) {
+            panel.style.display = 'none';
+        }
+    }
+
+    incrementMockCalls() {
+        this.stats.mockCalls++;
+        this.stats.savedCosts += 0.05; // Estimate 5 cents per AI call
+        this.saveStats();
+        this.updateStatsDisplay();
+    }
+
+    incrementOpportunitiesViewed() {
+        this.stats.opportunitiesViewed++;
+        this.saveStats();
+        this.updateStatsDisplay();
+    }
+
+    incrementProfilesAnalyzed() {
+        this.stats.profilesAnalyzed++;
+        this.saveStats();
+        this.updateStatsDisplay();
+    }
+
+    saveStats() {
+        localStorage.setItem('testControlStats', JSON.stringify(this.stats));
+    }
+
+    updateStatsDisplay() {
+        const elements = {
+            'mockCallsCount': this.stats.mockCalls,
+            'savedCostsEuro': `€${this.stats.savedCosts.toFixed(2)}`,
+            'testOpportunitiesViewed': this.stats.opportunitiesViewed,
+            'testProfilesAnalyzed': this.stats.profilesAnalyzed
+        };
+
+        Object.entries(elements).forEach(([id, value]) => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.textContent = value;
+            }
+        });
+    }
+
+    clearStats() {
+        this.stats = {
+            mockCalls: 0,
+            savedCosts: 0,
+            opportunitiesViewed: 0,
+            profilesAnalyzed: 0
+        };
+        this.saveStats();
+        this.updateStatsDisplay();
+    }
+}
+
+// Global functions for panel controls
+function toggleTestPanel() {
+    const panel = document.getElementById('testControlPanel');
+    const content = document.getElementById('testPanelContent');
+    const icon = document.getElementById('testPanelToggleIcon');
+    
+    if (content.style.display === 'none') {
+        content.style.display = 'block';
+        icon.className = 'fas fa-minus';
+    } else {
+        content.style.display = 'none';
+        icon.className = 'fas fa-plus';
+    }
+}
+
+function setAIMode(mode) {
+    const mockBtn = document.getElementById('mockModeBtn');
+    const liveBtn = document.getElementById('liveModeBtn');
+    
+    if (mode === 'mock') {
+        mockBtn.classList.add('active');
+        liveBtn.classList.remove('active');
+        if (window.mockAIService) {
+            window.mockAIService.setMockMode(true);
+        }
+        showToast('Modalità Test AI attivata', 'warning');
+    } else {
+        liveBtn.classList.add('active');
+        mockBtn.classList.remove('active');
+        if (window.mockAIService) {
+            window.mockAIService.setMockMode(false);
+        }
+        showToast('Modalità Live AI attivata', 'info');
+    }
+}
+
+function updateMockDelay(value) {
+    document.getElementById('currentDelay').textContent = `${value}ms`;
+    if (window.mockAIService) {
+        window.mockAIService.delay = parseInt(value);
+    }
+}
+
+function regenerateTestData() {
+    if (window.mockAIService) {
+        // Add some randomization to mock data
+        Object.keys(window.mockAIService.mockAnalyses).forEach(sector => {
+            const analysis = window.mockAIService.mockAnalyses[sector];
+            analysis.match_score = 70 + Math.floor(Math.random() * 25);
+        });
+        
+        showToast('Dati test rigenerati con successo', 'success');
+    }
+}
+
+function clearTestData() {
+    if (window.testControlPanel) {
+        window.testControlPanel.clearStats();
+    }
+    localStorage.removeItem('testControlStats');
+    localStorage.removeItem('mockAICache');
+    showToast('Cache test pulita', 'info');
+}
+
+// Initialize test control panel
+document.addEventListener('DOMContentLoaded', function() {
+    // Wait for other services to load
+    setTimeout(() => {
+        window.testControlPanel = new TestControlPanel();
+        
+        // Hook into mock AI service calls to track stats
+        if (window.mockAIService) {
+            const originalAnalyzeProfile = window.mockAIService.analyzeProfile.bind(window.mockAIService);
+            const originalAnalyzeCVContent = window.mockAIService.analyzeCVContent.bind(window.mockAIService);
+            const originalMatchOpportunities = window.mockAIService.matchOpportunities.bind(window.mockAIService);
+            
+            window.mockAIService.analyzeProfile = async function(...args) {
+                window.testControlPanel.incrementMockCalls();
+                window.testControlPanel.incrementProfilesAnalyzed();
+                return originalAnalyzeProfile(...args);
+            };
+            
+            window.mockAIService.analyzeCVContent = async function(...args) {
+                window.testControlPanel.incrementMockCalls();
+                return originalAnalyzeCVContent(...args);
+            };
+            
+            window.mockAIService.matchOpportunities = async function(...args) {
+                window.testControlPanel.incrementMockCalls();
+                window.testControlPanel.incrementOpportunitiesViewed();
+                return originalMatchOpportunities(...args);
+            };
+        }
+    }, 1000);
+});
+</script>
