@@ -319,28 +319,43 @@
 
 <script>
 // Dashboard specific functionality
-let currentTip = 0;
-const tips = document.querySelectorAll('.tip-item');
-const indicators = document.querySelectorAll('.tip-indicator');
-
-function showTip(index) {
-    // Hide all tips
-    tips.forEach(tip => tip.classList.remove('active'));
-    indicators.forEach(indicator => indicator.classList.remove('active'));
+(function() {
+    let currentTip = 0;
+    let tips, indicators;
     
-    // Show selected tip
-    if (tips[index]) {
-        tips[index].classList.add('active');
-        indicators[index].classList.add('active');
-        currentTip = index;
+    // Initialize when DOM is ready
+    function initializeTips() {
+        tips = document.querySelectorAll('.tip-item');
+        indicators = document.querySelectorAll('.tip-indicator');
     }
-}
 
-// Auto-rotate tips
-setInterval(() => {
-    currentTip = (currentTip + 1) % tips.length;
-    showTip(currentTip);
-}, 5000);
+    window.showTip = function(index) {
+        if (!tips) initializeTips();
+        
+        // Hide all tips
+        tips.forEach(tip => tip.classList.remove('active'));
+        indicators.forEach(indicator => indicator.classList.remove('active'));
+        
+        // Show selected tip
+        if (tips[index]) {
+            tips[index].classList.add('active');
+            indicators[index].classList.add('active');
+            currentTip = index;
+        }
+    }
+
+    // Initialize and start auto-rotation when dashboard loads
+    document.addEventListener('DOMContentLoaded', () => {
+        initializeTips();
+        if (tips.length > 0) {
+            showTip(0);
+            // Auto-rotate tips
+            setInterval(() => {
+                currentTip = (currentTip + 1) % tips.length;
+                showTip(currentTip);
+            }, 5000);
+        }
+    });
 
 // Dashboard functions
 async function showSavedOpportunities() {
@@ -395,4 +410,6 @@ async function downloadProfile() {
         showToast('Errore durante il download del CV', 'error');
     }
 }
+
+})(); // End of dashboard IIFE
 </script>

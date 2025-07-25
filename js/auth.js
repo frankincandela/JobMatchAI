@@ -220,25 +220,40 @@ class AuthService {
 
     static async logout() {
         try {
-            console.log('🚀 [LOGOUT] Logging out user');
+            console.log('🚪 [LOGOUT] Starting logout process');
             
-            // Sign out from Supabase
-            const { error } = await supabaseClient.auth.signOut();
-            
-            if (error) {
-                console.error('❌ [LOGOUT] Error:', error);
-                throw error;
-            }
-
-            // Clear local storage
-            localStorage.removeItem('career_guidance_user');
+            // Clear user data regardless of mode
             this.currentUser = null;
+            localStorage.removeItem('career_guidance_user');
+            
+            // Clear all demo profiles
+            const keys = Object.keys(localStorage);
+            keys.forEach(key => {
+                if (key.startsWith('demo_profile_')) {
+                    localStorage.removeItem(key);
+                }
+            });
 
-            console.log('✅ [LOGOUT] Logout completed');
+            // Try Supabase logout if available
+            if (typeof supabaseClient !== 'undefined' && supabaseClient && supabaseClient.auth) {
+                try {
+                    const { error } = await supabaseClient.auth.signOut();
+                    if (error) {
+                        console.warn('Supabase logout warning:', error);
+                    }
+                } catch (supabaseError) {
+                    console.log('🧪 [LOGOUT] Supabase logout not available, using local logout');
+                }
+            }
+            
+            console.log('✅ [LOGOUT] Logout successful');
 
         } catch (error) {
             console.error('❌ [LOGOUT] Unexpected error:', error);
-            throw error;
+            
+            // Ensure cleanup even on error
+            this.currentUser = null;
+            localStorage.removeItem('career_guidance_user');
         }
     }
 

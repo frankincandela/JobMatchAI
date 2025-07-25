@@ -2,6 +2,17 @@
 class ProfileService {
     static async getUserProfile(userId) {
         try {
+            // Check if user is demo user
+            if (AuthService.currentUser?.isDemo) {
+                return this.getDemoProfile(userId);
+            }
+
+            // Check if Supabase is available
+            if (typeof supabaseClient === 'undefined' || !supabaseClient || !supabaseClient.isReady || !supabaseClient.isReady()) {
+                console.log('🧪 [PROFILE] Supabase not available, using demo profile');
+                return this.getDemoProfile(userId);
+            }
+
             const { data, error } = await supabaseClient
                 .from('user_profiles')
                 .select('*')
@@ -33,8 +44,35 @@ class ProfileService {
 
         } catch (error) {
             console.error('Unexpected error fetching profile:', error);
-            return null;
+            return this.getDemoProfile(userId);
         }
+    }
+
+    static getDemoProfile(userId) {
+        // Get demo profile from localStorage or create new one
+        const storedProfile = localStorage.getItem(`demo_profile_${userId}`);
+        if (storedProfile) {
+            return JSON.parse(storedProfile);
+        }
+
+        // Create default demo profile
+        const demoProfile = {
+            id: userId,
+            biography: '',
+            experiences: [],
+            education: '',
+            certifications: '',
+            professionalReferences: '',
+            hobbies: '',
+            softSkills: '',
+            cvFilePath: null,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            isDemo: true
+        };
+
+        localStorage.setItem(`demo_profile_${userId}`, JSON.stringify(demoProfile));
+        return demoProfile;
     }
 
     static async saveUserProfile(profileData) {
@@ -57,6 +95,23 @@ class ProfileService {
                 updated_at: new Date().toISOString()
             };
 
+            // Check if user is demo user or Supabase unavailable
+            if (AuthService.currentUser?.isDemo || 
+                typeof supabaseClient === 'undefined' || 
+                !supabaseClient || 
+                !supabaseClient.isReady || 
+                !supabaseClient.isReady()) {
+                
+                console.log('🧪 [PROFILE] Saving to demo storage');
+                localStorage.setItem(`demo_profile_${AuthService.currentUser.id}`, JSON.stringify(profile));
+                
+                return {
+                    success: true,
+                    profile: profile,
+                    message: 'Profilo demo salvato con successo'
+                };
+            }
+
             const { data, error } = await supabaseClient
                 .from('user_profiles')
                 .upsert([profile])
@@ -65,7 +120,15 @@ class ProfileService {
 
             if (error) {
                 console.error('Error saving profile:', error);
-                throw error;
+                // Fallback to demo storage
+                console.log('🧪 [PROFILE] Falling back to demo storage');
+                localStorage.setItem(`demo_profile_${AuthService.currentUser.id}`, JSON.stringify(profile));
+                
+                return {
+                    success: true,
+                    profile: profile,
+                    message: 'Profilo salvato in modalità demo'
+                };
             }
 
             console.log('✅ Profile saved successfully');
