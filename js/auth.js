@@ -294,12 +294,12 @@ class AuthService {
         return null;
     }
 
-    static async getUserProfile(userId) {
+    static async getUserProfile(authUserId) {
         try {
             const { data, error } = await supabaseClient
                 .from('users')
                 .select('*')
-                .eq('id', userId)
+                .eq('auth_user_id', authUserId)
                 .single();
 
             if (error) {
@@ -313,19 +313,16 @@ class AuthService {
 
             return {
                 id: data.id,
+                authUserId: data.auth_user_id,
                 email: data.email,
-                firstName: data.first_name,
-                lastName: data.last_name,
+                fullName: data.full_name,
+                firstName: data.full_name ? data.full_name.split(' ')[0] : '',
+                lastName: data.full_name ? data.full_name.split(' ').slice(1).join(' ') : '',
                 dateOfBirth: data.date_of_birth,
-                profileImagePath: data.profile_image_path,
-                profileId: data.profile_id,
-                savedOpportunities: data.saved_opportunities || [],
+                phone: data.phone,
+                location: data.location,
                 createdAt: data.created_at,
-                updatedAt: data.updated_at,
-                isActive: data.is_active,
-                get fullName() {
-                    return `${this.firstName || ''} ${this.lastName || ''}`.trim();
-                }
+                updatedAt: data.updated_at
             };
 
         } catch (error) {
@@ -337,17 +334,12 @@ class AuthService {
     static async createUserProfile(authUser, additionalData = {}) {
         try {
             const userProfile = {
-                id: authUser.id,
+                auth_user_id: authUser.id,
                 email: authUser.email,
-                first_name: additionalData.firstName || authUser.user_metadata?.first_name || null,
-                last_name: additionalData.lastName || authUser.user_metadata?.last_name || null,
-                date_of_birth: null,
-                profile_image_path: null,
-                profile_id: null,
-                saved_opportunities: [],
-                created_at: new Date().toISOString(),
-                updated_at: new Date().toISOString(),
-                is_active: true
+                full_name: `${additionalData.firstName || ''} ${additionalData.lastName || ''}`.trim(),
+                date_of_birth: additionalData.dateOfBirth || null,
+                phone: additionalData.phone || null,
+                location: additionalData.location || null
             };
 
             const { data, error } = await supabaseClient
@@ -363,19 +355,16 @@ class AuthService {
 
             return {
                 id: data.id,
+                authUserId: data.auth_user_id,
                 email: data.email,
-                firstName: data.first_name,
-                lastName: data.last_name,
+                fullName: data.full_name,
+                firstName: data.full_name ? data.full_name.split(' ')[0] : '',
+                lastName: data.full_name ? data.full_name.split(' ').slice(1).join(' ') : '',
                 dateOfBirth: data.date_of_birth,
-                profileImagePath: data.profile_image_path,
-                profileId: data.profile_id,
-                savedOpportunities: data.saved_opportunities || [],
+                phone: data.phone,
+                location: data.location,
                 createdAt: data.created_at,
-                updatedAt: data.updated_at,
-                isActive: data.is_active,
-                get fullName() {
-                    return `${this.firstName || ''} ${this.lastName || ''}`.trim();
-                }
+                updatedAt: data.updated_at
             };
 
         } catch (error) {
