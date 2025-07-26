@@ -33,9 +33,9 @@
                             <div class="upload-icon">
                                 <i class="fas fa-cloud-upload-alt fa-4x text-primary mb-4"></i>
                             </div>
-                            <h4 class="upload-title mb-3">Carica il tuo Curriculum Vitae</h4>
+                            <h4 class="upload-title mb-3">Caricamento CV Temporaneamente Non Disponibile</h4>
                             <p class="upload-subtitle text-muted mb-4">
-                                Trascina qui il tuo file o clicca per selezionarlo dal computer
+                                Il servizio di storage è in configurazione. Procedi con l'inserimento manuale dei dati.
                             </p>
                             <div class="upload-formats mb-4">
                                 <span class="badge bg-light text-dark me-2">
@@ -48,9 +48,14 @@
                                     <i class="fas fa-file-word me-1"></i>DOCX
                                 </span>
                             </div>
-                            <button class="btn btn-primary btn-lg" id="selectFileBtn">
+                            <div class="alert alert-warning text-center mb-4">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                <strong>Caricamento CV temporaneamente non disponibile</strong><br>
+                                <small>Il servizio di storage è in configurazione. Puoi procedere inserendo manualmente i tuoi dati.</small>
+                            </div>
+                            <button class="btn btn-secondary btn-lg" disabled>
                                 <i class="fas fa-folder-open me-2"></i>
-                                Seleziona File
+                                Caricamento Non Disponibile
                             </button>
                             <p class="small text-muted mt-3 mb-0">
                                 <i class="fas fa-shield-alt me-1"></i>
@@ -345,35 +350,25 @@ class CVUploadComponent {
     }
 
     setupEventListeners() {
-        // File input change
-        const fileInput = document.getElementById('cvFileInput');
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                this.handleFileSelection(e.target.files[0]);
-            }
-        });
-
-        // Select file button
+        console.log('⚠️ CV upload disabled - storage bucket not configured');
+        
+        // Disable all upload functionality
         const selectFileBtn = document.getElementById('selectFileBtn');
         if (selectFileBtn) {
             selectFileBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                console.log('Select file button clicked');
-                fileInput.click();
+                showToast('Caricamento CV temporaneamente non disponibile', 'warning');
             });
         }
 
-        // Upload zone click
+        // Disable upload zone click
         const uploadZone = document.getElementById('cvUploadZone');
         if (uploadZone) {
             uploadZone.addEventListener('click', (e) => {
-                if (e.target.closest('#uploadContent') || e.target.closest('#selectFileBtn')) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log('Upload zone clicked');
-                    fileInput.click();
-                }
+                e.preventDefault();
+                e.stopPropagation();
+                showToast('Il servizio di storage è in configurazione', 'info');
             });
         }
 
@@ -397,26 +392,19 @@ class CVUploadComponent {
     }
 
     setupDragAndDrop() {
+        // Drag and drop disabled - storage not configured
+        console.log('🚫 Drag and drop disabled - storage bucket not available');
+        
         const uploadZone = document.getElementById('cvUploadZone');
-
-        // Prevent default drag behaviors
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            uploadZone.addEventListener(eventName, this.preventDefaults, false);
-            document.body.addEventListener(eventName, this.preventDefaults, false);
-        });
-
-        // Highlight drop zone when item is dragged over it
-        ['dragenter', 'dragover'].forEach(eventName => {
-            uploadZone.addEventListener(eventName, () => {
-                uploadZone.classList.add('dragover');
-            }, false);
-        });
-
-        ['dragleave', 'drop'].forEach(eventName => {
-            uploadZone.addEventListener(eventName, () => {
-                uploadZone.classList.remove('dragover');
-            }, false);
-        });
+        if (uploadZone) {
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                uploadZone.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    showToast('Caricamento file non disponibile', 'warning');
+                }, false);
+            });
+        }
 
         // Handle dropped files
         uploadZone.addEventListener('drop', (e) => {

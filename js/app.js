@@ -100,6 +100,16 @@ class CareerGuidanceApp {
         await this.loadView('opportunities-list');
     }
 
+    async loadOpportunitiesFromSupabase() {
+        console.log('🔄 Reloading opportunities from Supabase...');
+        try {
+            await OpportunityService.loadOpportunities();
+            console.log('✅ Opportunities reloaded from database');
+        } catch (error) {
+            console.error('Error reloading opportunities:', error);
+        }
+    }
+
     async loadView(viewName) {
         try {
             showLoading();
@@ -414,7 +424,10 @@ class CareerGuidanceApp {
 
 // Global functions for inline event handlers
 async function startCareerJourney() {
-    await app.loadView('cv-upload');
+    showToast('Caricamento CV non disponibile. Procedi direttamente con la registrazione.', 'info');
+    setTimeout(() => {
+        app.showRegister();
+    }, 2000);
 }
 
 async function showLogin() {

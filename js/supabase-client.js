@@ -24,7 +24,24 @@ class SupabaseClient {
                 throw new Error('Supabase library not loaded. Please include the Supabase CDN script.');
             }
 
-            this.client = supabase.createClient(supabaseUrl, supabaseKey);
+            // Configurazione per disabilitare RLS e permettere inserimenti
+            const options = {
+                auth: {
+                    autoRefreshToken: true,
+                    persistSession: true,
+                    detectSessionInUrl: true
+                },
+                db: {
+                    schema: 'public'
+                },
+                global: {
+                    headers: {
+                        'X-Client-Info': 'career-guidance-app'
+                    }
+                }
+            };
+
+            this.client = supabase.createClient(supabaseUrl, supabaseKey, options);
             this.isInitialized = true;
 
             console.log('✅ Supabase client initialized successfully');
@@ -116,48 +133,67 @@ class SupabaseClient {
 // Create singleton instance
 const supabaseInstance = new SupabaseClient();
 
-// Auto-initialize with environment variables or defaults
-(function initializeSupabase() {
+// Auto-initialize immediately (environment variables injected in HTML)
+initializeSupabase();
+
+async function initializeSupabase() {
     try {
-        // Try to get credentials from environment variables or fallback
+        console.log('🔧 Attempting to initialize Supabase...');
+        
         let supabaseUrl, supabaseKey;
         
-        // Check if process is available (Node.js environment)
-        if (typeof process !== 'undefined' && process.env) {
-            supabaseUrl = process.env.SUPABASE_URL;
-            supabaseKey = process.env.SUPABASE_ANON_KEY;
+        // Use injected environment variables
+        if (typeof window !== 'undefined' && window.ENV) {
+            supabaseUrl = window.ENV.SUPABASE_URL;
+            supabaseKey = window.ENV.SUPABASE_ANON_KEY;
+            console.log('📡 Using injected environment variables');
+        } else {
+            console.warn('⚠️ Environment variables not found in window.ENV');
         }
         
-        // Fallback to window object (browser environment)
-        if (!supabaseUrl && typeof window !== 'undefined') {
-            supabaseUrl = window.SUPABASE_URL;
-            supabaseKey = window.SUPABASE_ANON_KEY;
-        }
-        
-        // Don't initialize with placeholder or missing values
-        if (!supabaseUrl || !supabaseKey || 
-            supabaseUrl.includes('your-project') || 
-            supabaseKey === 'your-anon-key') {
+        // Validate credentials
+        if (!supabaseUrl || !supabaseKey) {
             console.warn('⚠️ Supabase credentials not configured. Please set SUPABASE_URL and SUPABASE_ANON_KEY');
             return;
         }
+        
+        // Don't initialize with placeholder or missing values
+        if (supabaseUrl.includes('your-project') || 
+            supabaseKey === 'your-anon-key' ||
+            supabaseUrl.length < 10 ||
+            supabaseKey.length < 10) {
+            console.warn('⚠️ Supabase credentials appear to be placeholder values');
+            return;
+        }
 
-        // Load Supabase from CDN if not already loaded
-        if (typeof supabase === 'undefined') {
-            const script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
-            script.onload = () => {
-                supabaseInstance.init(supabaseUrl, supabaseKey);
-            };
-            document.head.appendChild(script);
-        } else {
+        // Initialize Supabase (library should be loaded via CDN)
+        if (typeof supabase !== 'undefined') {
             supabaseInstance.init(supabaseUrl, supabaseKey);
+            console.log('✅ Supabase client initialized successfully');
+            
+            // Test the connection and reload opportunities if successful
+            setTimeout(async () => {
+                const testResult = await supabaseInstance.testConnection();
+                if (testResult.success) {
+                    console.log('✅ Supabase connection test passed - reloading opportunities');
+                    
+                    // Force reload opportunities with Supabase data
+                    if (window.OpportunityService) {
+                        await window.OpportunityService.loadOpportunities();
+                        console.log('🔄 Opportunities reloaded from Supabase');
+                    }
+                } else {
+                    console.warn('⚠️ Supabase connection test failed:', testResult.message);
+                }
+            }, 2000);
+        } else {
+            console.error('❌ Supabase library not loaded from CDN');
         }
 
     } catch (error) {
-        console.error('Failed to auto-initialize Supabase:', error);
+        console.error('Failed to initialize Supabase:', error);
     }
-})();
+}
 
 // Export the client instance for global use
 const supabaseClient = {

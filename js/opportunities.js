@@ -19,9 +19,12 @@ class OpportunityService {
                 userProfile = await ProfileService.getUserProfile(AuthService.currentUser.id);
             }
 
-            // Check if mock mode is enabled
-            if (window.mockAIService && window.mockAIService.isEnabled) {
-                console.log('🧪 Using Mock AI Service for opportunities');
+            // Check Supabase connection first, fallback to mock if needed
+            if (supabaseClient && supabaseClient.isReady && supabaseClient.isReady()) {
+                console.log('🗄️ Loading opportunities from Supabase database');
+                return await this.loadFromSupabase(userProfile);
+            } else if (window.mockAIService && window.mockAIService.isEnabled) {
+                console.log('🧪 Using Mock AI Service for opportunities (Supabase not available)');
                 
                 // Get mock opportunities
                 const mockOpportunities = userProfile 
@@ -59,19 +62,28 @@ class OpportunityService {
                 return this.opportunities;
             }
 
+            // If no mock service, use fallback data
+            console.log('⚠️ No data source available, using static fallback');
+            this.opportunities = [];
+            this.filteredOpportunities = [];
+            return this.opportunities;
+
+        } catch (error) {
+            console.error('Error loading opportunities:', error);
+            this.opportunities = [];
+            this.filteredOpportunities = [];
+            return this.opportunities;
+        }
+    }
+
+    static async loadFromSupabase(userProfile) {
+        try {
+            console.log('🗄️ Fetching opportunities from Supabase...');
+            
             // Load opportunities from database
             const { data, error } = await supabaseClient
                 .from('job_opportunities')
-                .select(`
-                    *,
-                    companies (
-                        name,
-                        sector,
-                        location,
-                        description,
-                        contact_email
-                    )
-                `)
+                .select('*')
                 .eq('is_active', true)
                 .order('created_at', { ascending: false });
 
@@ -119,14 +131,49 @@ class OpportunityService {
             }
 
             this.filteredOpportunities = [...this.opportunities];
-            this.renderOpportunities();
+            return this.opportunities;
 
         } catch (error) {
-            console.error('Error loading opportunities:', error);
-            showToast('Errore nel caricamento delle opportunità', 'error');
+            console.error('Error loading opportunities from Supabase:', error);
+            console.log('🧪 Falling back to mock service');
             
-            // Load fallback opportunities
-            this.loadFallbackOpportunities();
+            // Fallback to mock service
+            if (window.mockAIService && window.mockAIService.isEnabled) {
+                const mockOpportunities = userProfile 
+                    ? await window.mockAIService.matchOpportunities(userProfile, [])
+                    : window.mockAIService.getAllMockOpportunities();
+                
+                this.opportunities = mockOpportunities.map(item => ({
+                    id: item.id,
+                    title: item.title,
+                    companyId: item.company || item.companyName,
+                    companyName: item.company || item.companyName,
+                    companyEmail: 'info@' + (item.company || item.companyName).toLowerCase().replace(/\s+/g, '') + '.com',
+                    sector: item.sector,
+                    jobType: item.job_type,
+                    experienceLevel: item.experience_level,
+                    location: item.location,
+                    isRemote: item.location === 'Remote',
+                    description: item.description,
+                    requirements: item.requirements || [],
+                    responsibilities: [],
+                    requiredSkills: item.requirements || [],
+                    preferredSkills: [],
+                    salaryMin: item.salary_min,
+                    salaryMax: item.salary_max,
+                    benefits: item.benefits || [],
+                    applicationDeadline: null,
+                    contactEmail: 'info@' + (item.company || item.companyName).toLowerCase().replace(/\s+/g, '') + '.com',
+                    createdAt: item.posted_date,
+                    updatedAt: item.posted_date,
+                    matchScore: item.match_score || 0
+                }));
+                
+                this.filteredOpportunities = [...this.opportunities];
+                return this.opportunities;
+            }
+            
+            return [];
         }
     }
 
@@ -711,3 +758,6 @@ class OpportunityService {
         }
     }
 }
+
+// Make OpportunityService available globally for Supabase integration
+window.OpportunityService = OpportunityService;

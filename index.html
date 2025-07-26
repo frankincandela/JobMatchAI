@@ -128,8 +128,18 @@
     <!-- Test Control Panel (Development Only) -->
     <div id="testPanelContainer"></div>
 
+    <!-- Environment variables (must be first) -->
+    <script>
+        // Inject Supabase environment variables directly
+        window.ENV = {
+            SUPABASE_URL: "https://gfvslfufxecbqwicrixm.supabase.co",
+            SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdmdnNsZnVmeGVjYnF3aWNyaXhtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyNzM1NzksImV4cCI6MjA2ODg0OTU3OX0.7IiJeXtAbRZ_0yr46tUn2IsaNeX3uUhgm8WbBqx46cA"
+        };
+    </script>
+    
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/utils.js"></script>
     <script src="js/supabase-client.js"></script>
     <script src="js/mock-ai-service.js"></script>
@@ -138,8 +148,7 @@
     <script src="js/opportunities.js"></script>
     <script src="js/ai-analysis.js"></script>
     <script src="js/app.js"></script>
-    
-    <script>
+        
         // Load test panel if in development mode
         document.addEventListener('DOMContentLoaded', function() {
             // Check if we should show test panel (no real API keys or test mode)
