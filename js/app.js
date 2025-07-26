@@ -424,7 +424,10 @@ class CareerGuidanceApp {
 
 // Global functions for inline event handlers
 async function startCareerJourney() {
-    await app.loadView('cv-upload');
+    showToast('Caricamento CV non disponibile. Procedi direttamente con la registrazione.', 'info');
+    setTimeout(() => {
+        app.showRegister();
+    }, 2000);
 }
 
 async function showLogin() {
