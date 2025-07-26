@@ -333,6 +333,10 @@ class AuthService {
 
     static async createUserProfile(authUser, additionalData = {}) {
         try {
+            console.log('🔍 [CREATE_PROFILE] Starting profile creation for auth user:', authUser.id);
+            console.log('🔍 [CREATE_PROFILE] Auth user data:', authUser);
+            console.log('🔍 [CREATE_PROFILE] Additional data:', additionalData);
+            
             const userProfile = {
                 auth_user_id: authUser.id,
                 email: authUser.email,
@@ -342,11 +346,32 @@ class AuthService {
                 location: additionalData.location || null
             };
 
+            console.log('🔍 [CREATE_PROFILE] Profile data to insert:', userProfile);
+            console.log('🔍 [CREATE_PROFILE] Checking Supabase client state...');
+            console.log('🔍 [CREATE_PROFILE] Supabase client:', supabaseClient);
+            console.log('🔍 [CREATE_PROFILE] Attempting database insert...');
+
+            // Test di connessione diretta prima dell'inserimento
+            const testQuery = await supabaseClient.from('users').select('count', { count: 'exact', head: true });
+            console.log('🔍 [CREATE_PROFILE] Connection test result:', testQuery);
+
             const { data, error } = await supabaseClient
                 .from('users')
                 .insert([userProfile])
                 .select()
                 .single();
+            
+            console.log('🔍 [CREATE_PROFILE] Database response - data:', data);
+            console.log('🔍 [CREATE_PROFILE] Database response - error:', error);
+            
+            if (error) {
+                console.error('🔍 [CREATE_PROFILE] Error details:', {
+                    code: error.code,
+                    message: error.message,
+                    details: error.details,
+                    hint: error.hint
+                });
+            }
 
             if (error) {
                 console.error('Error creating user profile:', error);
