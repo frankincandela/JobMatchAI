@@ -399,14 +399,38 @@ class AuthService {
             console.log('🔍 [CREATE_PROFILE] Supabase client ready:', supabaseClient && supabaseClient.isReady && supabaseClient.isReady());
             console.log('🔍 [CREATE_PROFILE] About to attempt database insert...');
 
-            // Inserimento standard con RLS configurato correttamente
-            console.log('🔍 [CREATE_PROFILE] Using standard insert with proper RLS policies...');
-            console.log('🔍 [CREATE_PROFILE] Building Supabase query...');
+            // Prima tentativo: inserimento con RLS
+            console.log('🔍 [CREATE_PROFILE] Attempting insert with RLS policies...');
             
-            const query = supabaseClient.from('users').insert([userProfile]).select().single();
-            console.log('🔍 [CREATE_PROFILE] Query object created, executing...');
+            let { data, error } = await supabaseClient
+                .from('users')
+                .insert([userProfile])
+                .select()
+                .single();
             
-            const { data, error } = await query;
+            // Se fallisce per problemi di schema, prova con service_role o creare via auth trigger
+            if (error && error.code === 'PGRST204') {
+                console.log('🔍 [CREATE_PROFILE] Schema error detected, trying alternative approach...');
+                
+                // Alternativa: usa la tabella users con schema diverso o crea profilo minimo
+                const minimalProfile = {
+                    id: authUser.id, // Usa l'ID auth come primary key
+                    email: authUser.email,
+                    full_name: userProfile.full_name,
+                    created_at: new Date().toISOString()
+                };
+                
+                console.log('🔍 [CREATE_PROFILE] Trying minimal profile insert:', minimalProfile);
+                
+                const result = await supabaseClient
+                    .from('users')
+                    .upsert([minimalProfile], { onConflict: 'id,email' })
+                    .select()
+                    .single();
+                
+                data = result.data;
+                error = result.error;
+            }
             
             console.log('🔍 [CREATE_PROFILE] === DATABASE RESPONSE ===');
             console.log('🔍 [CREATE_PROFILE] Response data:', JSON.stringify(data, null, 2));
@@ -436,16 +460,16 @@ class AuthService {
                 throw error;
             }
 
-            // Dati dal database
+            // Dati dal database - adatta ai diversi schemi possibili
             const userData = data;
             
             return {
                 id: userData.id,
-                authUserId: userData.auth_user_id,
+                authUserId: userData.auth_user_id || userData.id, // Fallback per schemi diversi
                 email: userData.email,
-                fullName: userData.full_name,
-                firstName: userData.full_name ? userData.full_name.split(' ')[0] : '',
-                lastName: userData.full_name ? userData.full_name.split(' ').slice(1).join(' ') : '',
+                fullName: userData.full_name || `${additionalData.firstName || ''} ${additionalData.lastName || ''}`.trim(),
+                firstName: userData.full_name ? userData.full_name.split(' ')[0] : additionalData.firstName || '',
+                lastName: userData.full_name ? userData.full_name.split(' ').slice(1).join(' ') : additionalData.lastName || '',
                 dateOfBirth: userData.date_of_birth,
                 phone: userData.phone,
                 location: userData.location,
