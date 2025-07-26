@@ -166,9 +166,13 @@ class AuthService {
             }
 
             console.log('✅ [REGISTER] Auth user created:', data.user.id);
+            console.log('🔍 [REGISTER] About to create user profile...');
+            console.log('🔍 [REGISTER] Auth user object:', data.user);
+            console.log('🔍 [REGISTER] User data for profile:', userData);
 
             // Create user profile in database
             const userProfile = await this.createUserProfile(data.user, userData);
+            console.log('🔍 [REGISTER] User profile created successfully:', userProfile);
             
             this.currentUser = userProfile;
             
@@ -351,15 +355,17 @@ class AuthService {
             console.log('🔍 [CREATE_PROFILE] Supabase client:', supabaseClient);
             console.log('🔍 [CREATE_PROFILE] Attempting database insert...');
 
-            // Test di connessione diretta prima dell'inserimento
-            const testQuery = await supabaseClient.from('users').select('count', { count: 'exact', head: true });
-            console.log('🔍 [CREATE_PROFILE] Connection test result:', testQuery);
-
-            const { data, error } = await supabaseClient
-                .from('users')
-                .insert([userProfile])
-                .select()
-                .single();
+            // Usa la funzione SQL personalizzata per bypassare RLS
+            console.log('🔍 [CREATE_PROFILE] Using custom SQL function to bypass RLS...');
+            
+            const { data, error } = await supabaseClient.rpc('insert_user_profile', {
+                p_auth_user_id: userProfile.auth_user_id,
+                p_email: userProfile.email,
+                p_full_name: userProfile.full_name,
+                p_date_of_birth: userProfile.date_of_birth,
+                p_phone: userProfile.phone,
+                p_location: userProfile.location
+            });
             
             console.log('🔍 [CREATE_PROFILE] Database response - data:', data);
             console.log('🔍 [CREATE_PROFILE] Database response - error:', error);
@@ -378,18 +384,21 @@ class AuthService {
                 throw error;
             }
 
+            // La funzione RPC ritorna un array, prendiamo il primo elemento
+            const userData = Array.isArray(data) ? data[0] : data;
+            
             return {
-                id: data.id,
-                authUserId: data.auth_user_id,
-                email: data.email,
-                fullName: data.full_name,
-                firstName: data.full_name ? data.full_name.split(' ')[0] : '',
-                lastName: data.full_name ? data.full_name.split(' ').slice(1).join(' ') : '',
-                dateOfBirth: data.date_of_birth,
-                phone: data.phone,
-                location: data.location,
-                createdAt: data.created_at,
-                updatedAt: data.updated_at
+                id: userData.id,
+                authUserId: userData.auth_user_id,
+                email: userData.email,
+                fullName: userData.full_name,
+                firstName: userData.full_name ? userData.full_name.split(' ')[0] : '',
+                lastName: userData.full_name ? userData.full_name.split(' ').slice(1).join(' ') : '',
+                dateOfBirth: userData.date_of_birth,
+                phone: userData.phone,
+                location: userData.location,
+                createdAt: userData.created_at,
+                updatedAt: userData.updated_at
             };
 
         } catch (error) {
