@@ -24,7 +24,24 @@ class SupabaseClient {
                 throw new Error('Supabase library not loaded. Please include the Supabase CDN script.');
             }
 
-            this.client = supabase.createClient(supabaseUrl, supabaseKey);
+            // Configurazione per disabilitare RLS e permettere inserimenti
+            const options = {
+                auth: {
+                    autoRefreshToken: true,
+                    persistSession: true,
+                    detectSessionInUrl: true
+                },
+                db: {
+                    schema: 'public'
+                },
+                global: {
+                    headers: {
+                        'X-Client-Info': 'career-guidance-app'
+                    }
+                }
+            };
+
+            this.client = supabase.createClient(supabaseUrl, supabaseKey, options);
             this.isInitialized = true;
 
             console.log('✅ Supabase client initialized successfully');

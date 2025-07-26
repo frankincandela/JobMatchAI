@@ -355,17 +355,14 @@ class AuthService {
             console.log('🔍 [CREATE_PROFILE] Supabase client:', supabaseClient);
             console.log('🔍 [CREATE_PROFILE] Attempting database insert...');
 
-            // Usa la funzione SQL personalizzata per bypassare RLS
-            console.log('🔍 [CREATE_PROFILE] Using custom SQL function to bypass RLS...');
+            // Inserimento standard con RLS configurato correttamente
+            console.log('🔍 [CREATE_PROFILE] Using standard insert with proper RLS policies...');
             
-            const { data, error } = await supabaseClient.rpc('insert_user_profile', {
-                p_auth_user_id: userProfile.auth_user_id,
-                p_email: userProfile.email,
-                p_full_name: userProfile.full_name,
-                p_date_of_birth: userProfile.date_of_birth,
-                p_phone: userProfile.phone,
-                p_location: userProfile.location
-            });
+            const { data, error } = await supabaseClient
+                .from('users')
+                .insert([userProfile])
+                .select()
+                .single();
             
             console.log('🔍 [CREATE_PROFILE] Database response - data:', data);
             console.log('🔍 [CREATE_PROFILE] Database response - error:', error);
@@ -384,8 +381,8 @@ class AuthService {
                 throw error;
             }
 
-            // La funzione RPC ritorna un array, prendiamo il primo elemento
-            const userData = Array.isArray(data) ? data[0] : data;
+            // Dati dal database
+            const userData = data;
             
             return {
                 id: userData.id,
