@@ -4,7 +4,7 @@ class AuthService {
     
     static async login(email, password) {
         try {
-            console.log('🚀 [LOGIN] Starting login for:', email);
+            console.log('🚀 [LOGIN] Starting login for:', email,password);
             
             // Validate input
             if (!email || !password) {
@@ -401,7 +401,6 @@ class AuthService {
 
             // Prima tentativo: inserimento con RLS
             console.log('🔍 [CREATE_PROFILE] Attempting insert with RLS policies...');
-            console.log('profile created ',userProfile)
             
             let { data, error } = await supabaseClient
                 .from('users')
