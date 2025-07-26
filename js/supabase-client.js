@@ -116,13 +116,8 @@ class SupabaseClient {
 // Create singleton instance
 const supabaseInstance = new SupabaseClient();
 
-// Auto-initialize with environment variables or defaults  
-// Wait for DOM to be ready before initializing
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeSupabase);
-} else {
-    initializeSupabase();
-}
+// Auto-initialize immediately (environment variables injected in HTML)
+initializeSupabase();
 
 async function initializeSupabase() {
     try {
@@ -130,24 +125,13 @@ async function initializeSupabase() {
         
         let supabaseUrl, supabaseKey;
         
-        // Fetch environment variables from the server endpoint
-        try {
-            const response = await fetch('/api/env');
-            const env = await response.json();
-            supabaseUrl = env.SUPABASE_URL;
-            supabaseKey = env.SUPABASE_ANON_KEY;
-            
-            if (env.status === 'ok') {
-                console.log('📡 Successfully retrieved environment variables');
-            }
-        } catch (fetchError) {
-            console.warn('⚠️ Could not fetch environment variables from server');
-            
-            // Fallback to pre-injected variables
-            if (typeof window !== 'undefined' && window.ENV) {
-                supabaseUrl = window.ENV.SUPABASE_URL;
-                supabaseKey = window.ENV.SUPABASE_ANON_KEY;
-            }
+        // Use injected environment variables
+        if (typeof window !== 'undefined' && window.ENV) {
+            supabaseUrl = window.ENV.SUPABASE_URL;
+            supabaseKey = window.ENV.SUPABASE_ANON_KEY;
+            console.log('📡 Using injected environment variables');
+        } else {
+            console.warn('⚠️ Environment variables not found in window.ENV');
         }
         
         // Validate credentials
@@ -165,20 +149,28 @@ async function initializeSupabase() {
             return;
         }
 
-        // Initialize Supabase
+        // Initialize Supabase (library should be loaded via CDN)
         if (typeof supabase !== 'undefined') {
             supabaseInstance.init(supabaseUrl, supabaseKey);
             console.log('✅ Supabase client initialized successfully');
             
-            // Test the connection
-            const testResult = await supabaseInstance.testConnection();
-            if (testResult.success) {
-                console.log('✅ Supabase connection test passed');
-            } else {
-                console.warn('⚠️ Supabase connection test failed:', testResult.message);
-            }
+            // Test the connection and reload opportunities if successful
+            setTimeout(async () => {
+                const testResult = await supabaseInstance.testConnection();
+                if (testResult.success) {
+                    console.log('✅ Supabase connection test passed - reloading opportunities');
+                    
+                    // Force reload opportunities with Supabase data
+                    if (window.OpportunityService) {
+                        await window.OpportunityService.loadOpportunities();
+                        console.log('🔄 Opportunities reloaded from Supabase');
+                    }
+                } else {
+                    console.warn('⚠️ Supabase connection test failed:', testResult.message);
+                }
+            }, 2000);
         } else {
-            console.error('❌ Supabase library not loaded');
+            console.error('❌ Supabase library not loaded from CDN');
         }
 
     } catch (error) {
