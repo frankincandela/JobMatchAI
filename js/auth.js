@@ -401,6 +401,7 @@ class AuthService {
 
             // Prima tentativo: inserimento con RLS
             console.log('🔍 [CREATE_PROFILE] Attempting insert with RLS policies...');
+            console.log('profile created ',userProfile)
             
             let { data, error } = await supabaseClient
                 .from('users')
