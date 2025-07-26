@@ -122,10 +122,15 @@ class AuthService {
     static async register(userData) {
         try {
             console.log('🚀 [REGISTER] Starting registration for:', userData.email);
+            console.log('🔍 [DEBUG] Input userData:', JSON.stringify(userData, null, 2));
             
             // Validate input
+            console.log('🔍 [DEBUG] Validating registration data...');
             const validation = this.validateRegistrationData(userData);
+            console.log('🔍 [DEBUG] Validation result:', validation);
+            
             if (!validation.valid) {
+                console.log('❌ [DEBUG] Validation failed:', validation.message);
                 return {
                     success: false,
                     message: validation.message
@@ -133,13 +138,21 @@ class AuthService {
             }
 
             // Check if Supabase is available
+            console.log('🔍 [DEBUG] Checking Supabase availability...');
+            console.log('🔍 [DEBUG] supabaseClient type:', typeof supabaseClient);
+            console.log('🔍 [DEBUG] supabaseClient exists:', !!supabaseClient);
+            console.log('🔍 [DEBUG] supabaseClient.isReady exists:', !!(supabaseClient && supabaseClient.isReady));
+            
             if (typeof supabaseClient === 'undefined' || !supabaseClient || !supabaseClient.isReady || !supabaseClient.isReady()) {
                 console.log('🧪 [REGISTER] Supabase not available, using demo registration');
                 return await this.demoRegister(userData);
             }
+            
+            console.log('✅ [DEBUG] Supabase is available, proceeding with auth...');
 
             // Register with Supabase Auth
-            const { data, error } = await supabaseClient.auth.signUp({
+            console.log('🔍 [DEBUG] Preparing auth signup request...');
+            const authRequest = {
                 email: userData.email.trim().toLowerCase(),
                 password: userData.password,
                 options: {
@@ -148,10 +161,24 @@ class AuthService {
                         last_name: userData.lastName
                     }
                 }
-            });
+            };
+            console.log('🔍 [DEBUG] Auth request data:', JSON.stringify(authRequest, null, 2));
+            
+            console.log('🔍 [DEBUG] Calling supabaseClient.auth.signUp...');
+            const { data, error } = await supabaseClient.auth.signUp(authRequest);
+
+            console.log('🔍 [DEBUG] Auth signup response received');
+            console.log('🔍 [DEBUG] Auth data:', JSON.stringify(data, null, 2));
+            console.log('🔍 [DEBUG] Auth error:', error);
 
             if (error) {
                 console.error('❌ [REGISTER] Auth error:', error);
+                console.log('🔍 [DEBUG] Error details:', {
+                    code: error.code,
+                    message: error.message,
+                    status: error.status,
+                    name: error.name
+                });
                 return {
                     success: false,
                     message: this.getErrorMessage(error)
@@ -159,6 +186,7 @@ class AuthService {
             }
 
             if (!data.user) {
+                console.log('❌ [DEBUG] No user data returned from auth');
                 return {
                     success: false,
                     message: 'Registrazione fallita. Riprova più tardi.'
@@ -166,13 +194,24 @@ class AuthService {
             }
 
             console.log('✅ [REGISTER] Auth user created:', data.user.id);
-            console.log('🔍 [REGISTER] About to create user profile...');
-            console.log('🔍 [REGISTER] Auth user object:', data.user);
-            console.log('🔍 [REGISTER] User data for profile:', userData);
+            console.log('🔍 [DEBUG] Full auth user object:', JSON.stringify(data.user, null, 2));
+            console.log('🔍 [DEBUG] User session data:', JSON.stringify(data.session, null, 2));
+            console.log('🔍 [DEBUG] About to create user profile...');
+            console.log('🔍 [DEBUG] User data for profile creation:', JSON.stringify(userData, null, 2));
 
-            // Create user profile in database
-            const userProfile = await this.createUserProfile(data.user, userData);
-            console.log('🔍 [REGISTER] User profile created successfully:', userProfile);
+            try {
+                console.log('🔍 [DEBUG] Calling createUserProfile function...');
+                const userProfile = await this.createUserProfile(data.user, userData);
+                console.log('✅ [DEBUG] User profile created successfully:', JSON.stringify(userProfile, null, 2));
+            } catch (profileError) {
+                console.error('❌ [DEBUG] Profile creation failed:', profileError);
+                console.log('🔍 [DEBUG] Profile error details:', {
+                    message: profileError.message,
+                    code: profileError.code,
+                    stack: profileError.stack
+                });
+                throw profileError;
+            }
             
             this.currentUser = userProfile;
             
@@ -187,6 +226,8 @@ class AuthService {
 
         } catch (error) {
             console.error('❌ [REGISTER] Unexpected error:', error);
+            console.log('🔍 [DEBUG] Full error object:', JSON.stringify(error, null, 2));
+            console.log('🔍 [DEBUG] Error stack trace:', error.stack);
             return {
                 success: false,
                 message: 'Errore durante la registrazione. Riprova più tardi.'
@@ -337,9 +378,10 @@ class AuthService {
 
     static async createUserProfile(authUser, additionalData = {}) {
         try {
-            console.log('🔍 [CREATE_PROFILE] Starting profile creation for auth user:', authUser.id);
-            console.log('🔍 [CREATE_PROFILE] Auth user data:', authUser);
-            console.log('🔍 [CREATE_PROFILE] Additional data:', additionalData);
+            console.log('🔍 [CREATE_PROFILE] === STARTING PROFILE CREATION ===');
+            console.log('🔍 [CREATE_PROFILE] Auth user ID:', authUser.id);
+            console.log('🔍 [CREATE_PROFILE] Full auth user data:', JSON.stringify(authUser, null, 2));
+            console.log('🔍 [CREATE_PROFILE] Additional data:', JSON.stringify(additionalData, null, 2));
             
             const userProfile = {
                 auth_user_id: authUser.id,
@@ -350,22 +392,35 @@ class AuthService {
                 location: additionalData.location || null
             };
 
-            console.log('🔍 [CREATE_PROFILE] Profile data to insert:', userProfile);
+            console.log('🔍 [CREATE_PROFILE] Profile data to insert:', JSON.stringify(userProfile, null, 2));
             console.log('🔍 [CREATE_PROFILE] Checking Supabase client state...');
-            console.log('🔍 [CREATE_PROFILE] Supabase client:', supabaseClient);
-            console.log('🔍 [CREATE_PROFILE] Attempting database insert...');
+            console.log('🔍 [CREATE_PROFILE] Supabase client type:', typeof supabaseClient);
+            console.log('🔍 [CREATE_PROFILE] Supabase client exists:', !!supabaseClient);
+            console.log('🔍 [CREATE_PROFILE] Supabase client ready:', supabaseClient && supabaseClient.isReady && supabaseClient.isReady());
+            console.log('🔍 [CREATE_PROFILE] About to attempt database insert...');
 
             // Inserimento standard con RLS configurato correttamente
             console.log('🔍 [CREATE_PROFILE] Using standard insert with proper RLS policies...');
+            console.log('🔍 [CREATE_PROFILE] Building Supabase query...');
             
-            const { data, error } = await supabaseClient
-                .from('users')
-                .insert([userProfile])
-                .select()
-                .single();
+            const query = supabaseClient.from('users').insert([userProfile]).select().single();
+            console.log('🔍 [CREATE_PROFILE] Query object created, executing...');
             
-            console.log('🔍 [CREATE_PROFILE] Database response - data:', data);
-            console.log('🔍 [CREATE_PROFILE] Database response - error:', error);
+            const { data, error } = await query;
+            
+            console.log('🔍 [CREATE_PROFILE] === DATABASE RESPONSE ===');
+            console.log('🔍 [CREATE_PROFILE] Response data:', JSON.stringify(data, null, 2));
+            console.log('🔍 [CREATE_PROFILE] Response error:', error);
+            console.log('🔍 [CREATE_PROFILE] Error type:', typeof error);
+            
+            if (error) {
+                console.log('🔍 [CREATE_PROFILE] === ERROR ANALYSIS ===');
+                console.log('🔍 [CREATE_PROFILE] Error code:', error.code);
+                console.log('🔍 [CREATE_PROFILE] Error message:', error.message);
+                console.log('🔍 [CREATE_PROFILE] Error details:', error.details);
+                console.log('🔍 [CREATE_PROFILE] Error hint:', error.hint);
+                console.log('🔍 [CREATE_PROFILE] Full error object:', JSON.stringify(error, null, 2));
+            }
             
             if (error) {
                 console.error('🔍 [CREATE_PROFILE] Error details:', {
@@ -399,13 +454,21 @@ class AuthService {
             };
 
         } catch (error) {
-            console.error('Error creating user profile:', error);
+            console.error('❌ [CREATE_PROFILE] === EXCEPTION CAUGHT ===');
+            console.error('🔍 [CREATE_PROFILE] Exception message:', error.message);
+            console.error('🔍 [CREATE_PROFILE] Exception code:', error.code);
+            console.error('🔍 [CREATE_PROFILE] Exception stack:', error.stack);
+            console.error('🔍 [CREATE_PROFILE] Full exception:', JSON.stringify(error, null, 2));
             throw error;
         }
     }
 
     static validateRegistrationData(userData) {
+        console.log('🔍 [VALIDATION] === STARTING VALIDATION ===');
+        console.log('🔍 [VALIDATION] User data received:', JSON.stringify(userData, null, 2));
+        
         if (!userData.email || !userData.password) {
+            console.log('🔍 [VALIDATION] Missing email or password');
             return {
                 valid: false,
                 message: 'Email e password sono obbligatori'
@@ -413,6 +476,7 @@ class AuthService {
         }
 
         if (!this.isValidEmail(userData.email)) {
+            console.log('🔍 [VALIDATION] Invalid email format');
             return {
                 valid: false,
                 message: 'Email non valida'
@@ -420,6 +484,7 @@ class AuthService {
         }
 
         if (userData.password.length < 6) {
+            console.log('🔍 [VALIDATION] Password too short');
             return {
                 valid: false,
                 message: 'La password deve essere di almeno 6 caratteri'
@@ -427,12 +492,14 @@ class AuthService {
         }
 
         if (userData.password !== userData.confirmPassword) {
+            console.log('🔍 [VALIDATION] Passwords do not match');
             return {
                 valid: false,
                 message: 'Le password non coincidono'
             };
         }
 
+        console.log('🔍 [VALIDATION] Validation passed');
         return { valid: true };
     }
 
@@ -442,6 +509,27 @@ class AuthService {
     }
 
     static getErrorMessage(error) {
+        console.log('🔍 [ERROR_MESSAGE] Processing error:', JSON.stringify(error, null, 2));
+        console.log('🔍 [ERROR_MESSAGE] Error code:', error.code);
+        console.log('🔍 [ERROR_MESSAGE] Error message:', error.message);
+        
+        if (error.code) {
+            switch (error.code) {
+                case 'invalid_credentials':
+                    return 'Credenziali non valide';
+                case 'email_already_exists':
+                    return 'Questo indirizzo email è già registrato';
+                case 'weak_password':
+                    return 'La password è troppo debole';
+                case 'invalid_email':
+                    return 'Indirizzo email non valido';
+                case 'over_email_send_rate_limit':
+                    return 'Troppi tentativi di invio email. Riprova più tardi.';
+                default:
+                    console.log('🔍 [ERROR_MESSAGE] Unknown error code, checking message');
+            }
+        }
+        
         switch (error.message) {
             case 'Invalid login credentials':
                 return 'Email o password non corretti';
@@ -452,6 +540,7 @@ class AuthService {
             case 'Too many requests':
                 return 'Troppi tentativi. Riprova tra qualche minuto.';
             default:
+                console.log('🔍 [ERROR_MESSAGE] Using default error message');
                 return error.message || 'Errore durante l\'operazione';
         }
     }
